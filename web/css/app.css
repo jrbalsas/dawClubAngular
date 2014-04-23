@@ -1,0 +1,17 @@
+#listaClientes {
+    padding: 8px;
+    border: solid 1px silver;    
+}
+#divCliente {
+    padding: 8px;
+    border: solid 1px silver;
+    width: 27em;
+    //display: inline-block;    
+}
+#msg, .err {
+    color: red;
+}
+
+.form-css .ng-invalid {
+    color: red;
+}

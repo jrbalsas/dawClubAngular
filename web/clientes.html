@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html data-ng-app="clientesApp" lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Gestión Clientes</title>
+        <link rel="stylesheet"  href="css/app.css"/>
+    </head>
+    <body  data-ng-controller="ClientesCtrl as cliCtrl">
+        <h1>Gestión CRUD Clientes Angular</h1>
+        <p>click en elemento para editar<p>
+        <table>
+            <tr data-ng-repeat="c in cliCtrl.clientes" data-ng-click="cliCtrl.edita(c.id)">
+                <td>{{c.id}}</td><td>{{c.nombre}}</td><td>{{c.dni}}</td><td>{{c.socio}}</td>
+            </tr>
+        </table>
+        <button data-ng-click="cliCtrl.crea()">Nuevo</button>
+        <a href="index.html">Inicio</a>
+        <form novalidate class="form-css" name='frmClientes' data-ng-show='cliCtrl.editMode'>
+            ID: <span data-ng-bind='cliCtrl.cliente.id'></span><br/>
+            Nombre: <input name='nombre' data-ng-model="cliCtrl.cliente.nombre" required/>
+            <span id="errNombre" class="err" ng-show='frmClientes.nombre.$dirty && !frmClientes.nombre.$valid'>
+                El nombre es obligatorio
+            </span><br/>
+            DNI: <input name="Dni" data-ng-model="cliCtrl.cliente.dni" ng-pattern='/^\d{7,8}(-?[a-z])?$/i'/>
+            <span id="errDni" ng-show='frmClientes.Dni.$dirty && !frmClientes.Dni.$valid'>
+                El DNI no es de la forma 12345678-A
+            </span><br/>
+            Socio: <input type="checkbox" id="ibSocio" data-ng-model="cliCtrl.cliente.socio"/><br/>
+            <button data-ng-click="cliCtrl.guarda(cliCtrl.cliente)" data-ng-disabled='!frmClientes.$valid'>Guardar</button>
+            <button data-ng-click="cliCtrl.borra(cliCtrl.cliente.id)" data-ng-disabled='!(cliCtrl.cliente.id>0)'>Borrar</button>
+            <button data-ng-click="cliCtrl.reset()">Cancelar</button>
+        </form>
+        {{cliCtrl.cliente.nombre}}
+        <!-- Custom directive sample-->
+        <cliente datos="cliCtrl.cliente"/>    
+
+        <!-- Angular Dependencies -->
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+        
+        <!-- App modules -->
+        <script src="js/app.js"></script>
+        <script src="js/directives.js"></script>        
+        <script src="js/services.js"></script>
+        <script src="js/controllers.js"></script>
+    </body>
+</html>

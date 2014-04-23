@@ -1,0 +1,12 @@
+<div>
+    <table>
+        <tr data-ng-repeat="c in clientes" data-ng-click="edita(c.id)">
+            <td>{{c.id}}</td><td>{{c.nombre}}</td><td>{{c.dni}}</td><td>{{c.socio}}</td>
+            <td><a href="#/visualiza/{{c.id}}">Ver</a>
+                <a href="#/edita/{{c.id}}">Editar</a>
+                <a href="#/borra/{{c.id}}">Borrar</a>
+            </td>
+        </tr>
+    </table>
+    <a href="#/crea">Nuevo</a>
+</div>

@@ -1,0 +1,15 @@
+<form novalidate class="form-css" name='frmClientes' >
+    ID: <span data-ng-bind='cliente.id'></span><br/>
+    Nombre: <input name='nombre' data-ng-model="cliente.nombre" required/>
+    <span id="errNombre" ng-show='frmClientes.nombre.$dirty && !frmClientes.nombre.$valid'>
+        El nombre es obligatorio
+    </span><br/>
+    DNI: <input name="Dni" data-ng-model="cliente.dni" ng-pattern='/^\d{7,8}(-?[a-z])?$/i' required/>
+    <span id="errDni" ng-show='frmClientes.Dni.$dirty && !frmClientes.Dni.$valid'>
+        El DNI no es de la forma 12345678-A
+    </span><br/>
+    Socio: <input type="checkbox" id="ibSocio" data-ng-model="cliente.socio"/><br/>
+    <button data-ng-click="guarda(cliente)" data-ng-disabled='!frmClientes.$valid'>Guardar</button>
+    <button data-ng-click="borra(cliente.id)" data-ng-show='cliente.id>0'>Borrar</button>
+    <a href="#/lista">Cancelar</a>
+</form>
