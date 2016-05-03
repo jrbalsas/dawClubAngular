@@ -1,7 +1,7 @@
 dawClub using AngujarJS
 ==========
 
-Sample Netbeans project with classic CRUD Web App using AngularJS
+Sample Maven Netbeans project with classic CRUD Web App using AngularJS
 
 Features:
 -------------
