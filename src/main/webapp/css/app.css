@@ -6,7 +6,7 @@
     padding: 8px;
     border: solid 1px silver;
     width: 27em;
-    //display: inline-block;    
+/*    display: inline-block;    */
 }
 #msg, .err {
     color: red;
