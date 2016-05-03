@@ -23,25 +23,25 @@ angular.module('clientesApp.controllers', [])
         this.editMode=true;
     };
     this.edita=function (id) {
-        ClientesDAO.busca(id).success(function(cliente) {
+        ClientesDAO.busca(id).then(function(cliente) {
                 self.cliente=cliente;
                 self.editMode=true;
         });
     };      
     this.borra=function (id) {
         if (angular.isNumber(id)) {
-            ClientesDAO.borra(id).success(this.updateClientes);
+            ClientesDAO.borra(id).then(this.updateClientes);
         };
         this.reset();
     };
     this.guarda=function (cliente) {
         if (cliente.id>0) {
           //Modify cliente data
-          ClientesDAO.guarda(cliente).success(this.updateClientes);
+          ClientesDAO.guarda(cliente).then(this.updateClientes);
       } else {
           //New cliente
           cliente.id=0;
-          ClientesDAO.crea(cliente).success(this.updateClientes);
+          ClientesDAO.crea(cliente).then(this.updateClientes);
       }
         this.reset();
     };
@@ -50,7 +50,7 @@ angular.module('clientesApp.controllers', [])
         this.editMode=false;
     };
     this.updateClientes= function () {
-        ClientesDAO.buscaTodos().success(function (clientes) {
+        ClientesDAO.buscaTodos().then(function (clientes) {
         //"this" can not be controller when this method is executed as callback. i.e. in DAO
             self.clientes=clientes;
         });
@@ -63,34 +63,37 @@ angular.module('clientesApp.controllers', [])
   .controller('ClientesRouteCtrl', ['$scope','$routeParams','$location','ClientesDAOList',function($scope,$routeParams,$location,ClientesDAO) {
     //ClientesCtrl routing action version
 
-    //view model (traditional way (using $scope for view-model)
-    $scope.cliente={};
-    $scope.clientes=[];
+    //used to access controller when some method is used as callback on other object
+    var self=this;
+    
+    //view model 
+    this.cliente={};
+    this.clientes=[];
 
     //edita.html view button actions
-    $scope.borra=function (id) {
+    this.borra=function (id) {
         if (angular.isNumber(id)) {
-            ClientesDAO.borra(id).success(function (json) {
-               $scope.updateClientes(); 
+            ClientesDAO.borra(id).then(function (json) {
+               self.updateClientes(); 
             });
         };
     };
-    $scope.guarda=function (cliente) {
+    this.guarda=function (cliente) {
         if (cliente.id>0) {
           //Modify cliente data
-          ClientesDAO.guarda(cliente).success(function (json) {
-              $scope.updateClientes();
+          ClientesDAO.guarda(cliente).then(function (json) {
+              self.updateClientes();
           });
       } else {
           //New cliente
           cliente.id=0;
-          ClientesDAO.crea(cliente).success(function () {
-              $scope.updateClientes();
+          ClientesDAO.crea(cliente).then(function () {
+              self.updateClientes();
           });
       }
     };
 
-    $scope.updateClientes= function () {
+    this.updateClientes= function () {
         $location.path("/lista");  //Post-Redirect-Get
     };
 
@@ -103,19 +106,19 @@ angular.module('clientesApp.controllers', [])
     }
 
     if (action=="visualiza" || action=="edita") {
-        ClientesDAO.busca(idCliente).success(function (cliente) {
-            $scope.cliente=cliente;
+        ClientesDAO.busca(idCliente).then(function (cliente) {
+            self.cliente=cliente;
         });        
     }else if (action=="crea") {
-        $scope.cliente={};
+        this.cliente={};
     }else if (action=="borra") {
-        ClientesDAO.borra(idCliente).success(function(json) { 
-            $scope.updateClientes();
+        ClientesDAO.borra(idCliente).then(function(json) { 
+            self.updateClientes();
         });
     }else {
         //default: action=="lista"
-        ClientesDAO.buscaTodos().success(function (clientes) {
-            $scope.clientes=clientes;
+        ClientesDAO.buscaTodos().then(function (clientes) {
+            self.clientes=clientes;
         });       
     };                      
                                  
