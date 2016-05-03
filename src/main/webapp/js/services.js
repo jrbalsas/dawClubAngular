@@ -44,12 +44,12 @@ angular.module('clientesApp.services', [])
         function asyncOp (data) {
             var deferred= $q.defer();  //Create promise
             //create promise success method as in $http
-            deferred.promise.success= function (usrCallBack) {
-                deferred.promise.then(function(data){
-                    usrCallBack(data);
-                },
-                null);
-            };
+//            deferred.promise.success= function (usrCallBack) {
+//                deferred.promise.then(function(data){
+//                    usrCallBack(data);
+//                },
+//                null);
+//            };
             $timeout(function() {
                 deferred.resolve(data);
             }, 100);
