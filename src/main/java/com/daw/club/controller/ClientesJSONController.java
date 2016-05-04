@@ -1,10 +1,10 @@
-package daw.club.controller;
+package com.daw.club.controller;
 
-import daw.club.Util;
-import daw.club.model.Cliente;
-import daw.club.model.dao.ClienteDAO;
-import daw.club.model.dao.ClienteDAOJDBC;
-import daw.club.model.dao.ClienteDAOList;
+import com.daw.club.Util;
+import com.daw.club.model.Cliente;
+import com.daw.club.model.dao.ClienteDAO;
+import com.daw.club.model.dao.ClienteDAOJDBC;
+import com.daw.club.model.dao.ClienteDAOList;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -39,55 +39,102 @@ public class ClientesJSONController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setHeader("Expires","0"); //Avoid browser caching response
 
+    }   
+
+    /**
+     * Handles the HTTP
+     * <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
         String action=(request.getPathInfo()!=null?request.getPathInfo():"");
-        String jsonOut="{}";
+        String jsonOut="{\"errMsg\": \"Operacion no soportada\"}";
         Map<String,String> err=new HashMap<>(); //Error messages
-        
-        if (action.equals("/busca")) {
-            //OBTIENE UN CLIENTE
-            int id=Integer.parseInt(request.getParameter("id"));
-            Cliente c = clienteDAO.buscaId(id);
-            jsonOut=clienteToJSON(c).toString();
-        } else if (action.equals("/borra")) {
-            //BORRAR CLIENTE
-            int id=Integer.parseInt(Util.getParam(request.getParameter("id"),"0"));
-            if (id>0) {
-                clienteDAO.borra(id);
-            }
-        } else if (action.equals("/crea")) {
-            //ALTA DE UN CLIENTE
-            Cliente c = new Cliente();
-            if (request.getParameter("id")!=null) {
-                if (validarCliente(request,c,err)) {
-                    clienteDAO.crea(c); //Create new client
-                    //Return primary key
+        switch (action) {
+            case "/busca": { //OBTIENE UN CLIENTE
+                    int id=Integer.parseInt(request.getParameter("id"));
+                    Cliente c = clienteDAO.buscaId(id);
                     jsonOut=clienteToJSON(c).toString();
-                } else {
-                    jsonOut=errToJSON(err).toString();
-                }
+                    break;
+            }       
+            case "/borra": {//BORRAR CLIENTE
+                    int id=Integer.parseInt(Util.getParam(request.getParameter("id"),"0"));
+                    if (id>0) {
+                        clienteDAO.borra(id);
+                    }       
+                    break;
             }
-        } else if (action.equals("/guarda")) {
-            //EDICION DE UN CLIENTE
-            Cliente c=new Cliente();
-            if (request.getParameter("id")!=null) {
-                if (validarCliente(request,c,err)) {
-                    //Guardar Cliente
-                    clienteDAO.guarda(c);
-                } else {
-                    jsonOut=errToJSON(err).toString();
-                }
-            }
-        }else {
-            //LISTAR TODOS LOS CLIENTES
-            List<Cliente> lc = clienteDAO.buscaTodos();
-            jsonOut=clientesToJSON(lc).toString();
+            default:
+                //LISTAR TODOS LOS CLIENTES
+                List<Cliente> lc = clienteDAO.buscaTodos();
+                jsonOut=clientesToJSON(lc).toString();
+                break;
         }
         //Return jsonOut code 
         try (PrintWriter writer = response.getWriter()) {
             writer.print(jsonOut);
         }
-    }   
+    }
 
+    /**
+     * Handles the HTTP
+     * <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+        String action=(request.getPathInfo()!=null?request.getPathInfo():"");
+        String jsonOut="{\"errMsg\": \"Operacion no soportada\"}";
+        Map<String,String> err=new HashMap<>(); //Error messages
+
+        switch (action) {
+            case "/crea": {//ALTA DE UN CLIENTE
+                    Cliente c = new Cliente();
+                    if (validarCliente(request,c,err)) {
+                        clienteDAO.crea(c); //Create new client
+                        //Return primary key
+                        jsonOut=clienteToJSON(c).toString();
+                    } else {
+                        jsonOut=errToJSON(err).toString();
+                    }
+                    break;
+            }
+            case "/guarda": { //EDICION DE UN CLIENTE
+                    Cliente c=new Cliente();
+                    if (request.getParameter("id")!=null) {
+                        if (validarCliente(request,c,err)) {
+                            //Guardar Cliente
+                            clienteDAO.guarda(c);
+                        } else {
+                            jsonOut=errToJSON(err).toString();
+                        }
+                    } else {
+                        jsonOut="{\"errMsg\": \"Falta el id del cliente\"}";
+                    }   
+                    break;
+            }
+        }
+        //Return jsonOut code 
+        try (PrintWriter writer = response.getWriter()) {
+            writer.print(jsonOut);
+        }
+
+    }
+
+    
     /**Recopilar datos de un formulario de cliente y generar mensajes de error*/
     private boolean validarCliente(HttpServletRequest request, Cliente c, Map<String,String> err) {
         boolean valido=true;
@@ -149,37 +196,7 @@ public class ClientesJSONController extends HttpServlet {
     }
     
     
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP
-     * <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP
-     * <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
+    
     /**
      * Returns a short description of the servlet.
      *
@@ -188,5 +205,5 @@ public class ClientesJSONController extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 }

@@ -1,7 +1,7 @@
-package daw.club.model.dao;
+package com.daw.club.model.dao;
 
-import daw.club.model.Cliente;
-import daw.club.model.Cliente;
+import com.daw.club.model.Cliente;
+import com.daw.club.model.Cliente;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
