@@ -1,8 +1,14 @@
-package daw.club.model;
+package com.daw.club.model;
 
-public class Cliente {
+import java.io.Serializable;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+public class Cliente implements Serializable {
     private int id;
+    @Size(min=4,max=25)
     private String nombre;
+    @Pattern(regexp="\\d{7,8}(-?[a-zA-Z])?",message="{cliente.dni.formato}")
     private String dni;
     private boolean socio;
 

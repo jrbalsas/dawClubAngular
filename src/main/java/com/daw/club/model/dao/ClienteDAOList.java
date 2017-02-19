@@ -1,10 +1,13 @@
-package daw.club.model.dao;
+package com.daw.club.model.dao;
 
-import daw.club.model.Cliente;
-import daw.club.model.Cliente;
+import com.daw.club.model.dao.qualifiers.DAOList;
+import com.daw.club.model.Cliente;
 import java.util.ArrayList;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped      //Elegible for Dependency Injection
+@DAOList
 public class ClienteDAOList implements ClienteDAO{
 
     private static ArrayList<Cliente> clientes=null;

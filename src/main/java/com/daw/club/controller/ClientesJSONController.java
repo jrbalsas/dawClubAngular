@@ -1,10 +1,10 @@
-package daw.club.controller;
+package com.daw.club.controller;
 
-import daw.club.Util;
-import daw.club.model.Cliente;
-import daw.club.model.dao.ClienteDAO;
-import daw.club.model.dao.ClienteDAOJDBC;
-import daw.club.model.dao.ClienteDAOList;
+import com.daw.club.Util;
+import com.daw.club.model.Cliente;
+import com.daw.club.model.dao.ClienteDAO;
+import com.daw.club.model.dao.ClienteDAOJDBC;
+import com.daw.club.model.dao.ClienteDAOList;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
