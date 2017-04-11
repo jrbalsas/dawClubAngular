@@ -8,6 +8,7 @@
     <body  data-ng-controller="ClientesCtrl as cliCtrl">
         <h1>Gestión CRUD Clientes Angular</h1>
         <p>click en elemento para editar<p>
+        <div class="err">{{cliCtrl.errMsg}}</div>
         <table>
             <tr data-ng-repeat="c in cliCtrl.clientes" data-ng-click="cliCtrl.edita(c.id)">
                 <td>{{c.id}}</td><td>{{c.nombre}}</td><td>{{c.dni}}</td><td>{{c.socio}}</td>

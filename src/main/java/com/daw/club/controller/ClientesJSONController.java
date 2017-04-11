@@ -42,45 +42,55 @@ public class ClientesJSONController extends HttpServlet {
         String action=(request.getPathInfo()!=null?request.getPathInfo():"");
         String jsonOut="{}";
         Map<String,String> err=new HashMap<>(); //Error messages
-        
-        if (action.equals("/busca")) {
-            //OBTIENE UN CLIENTE
-            int id=Integer.parseInt(request.getParameter("id"));
-            Cliente c = clienteDAO.buscaId(id);
-            jsonOut=clienteToJSON(c).toString();
-        } else if (action.equals("/borra")) {
-            //BORRAR CLIENTE
-            int id=Integer.parseInt(Util.getParam(request.getParameter("id"),"0"));
-            if (id>0) {
-                clienteDAO.borra(id);
-            }
-        } else if (action.equals("/crea")) {
-            //ALTA DE UN CLIENTE
-            Cliente c = new Cliente();
-            if (request.getParameter("id")!=null) {
-                if (validarCliente(request,c,err)) {
-                    clienteDAO.crea(c); //Create new client
-                    //Return primary key
+        switch (action) {
+            case "/busca":
+                {
+                    //OBTIENE UN CLIENTE
+                    int id=Integer.parseInt(request.getParameter("id"));
+                    Cliente c = clienteDAO.buscaId(id);
                     jsonOut=clienteToJSON(c).toString();
-                } else {
-                    jsonOut=errToJSON(err).toString();
+                    break;
                 }
-            }
-        } else if (action.equals("/guarda")) {
-            //EDICION DE UN CLIENTE
-            Cliente c=new Cliente();
-            if (request.getParameter("id")!=null) {
-                if (validarCliente(request,c,err)) {
-                    //Guardar Cliente
-                    clienteDAO.guarda(c);
-                } else {
-                    jsonOut=errToJSON(err).toString();
+            case "/borra":
+                {
+                    //BORRAR CLIENTE
+                    int id=Integer.parseInt(Util.getParam(request.getParameter("id"),"0"));
+                    if (id>0) {
+                        clienteDAO.borra(id);
+                    }       break;
                 }
-            }
-        }else {
-            //LISTAR TODOS LOS CLIENTES
-            List<Cliente> lc = clienteDAO.buscaTodos();
-            jsonOut=clientesToJSON(lc).toString();
+            case "/crea":
+                {
+                    //ALTA DE UN CLIENTE
+                    Cliente c = new Cliente();
+                    if (request.getParameter("id")!=null) {
+                        if (validarCliente(request,c,err)) {
+                            clienteDAO.crea(c); //Create new client
+                            //Return primary key
+                            jsonOut=clienteToJSON(c).toString();
+                        } else {
+                            jsonOut=errToJSON(err).toString();
+                        }
+                    }       break;
+                }
+            case "/guarda":
+                {
+                    //EDICION DE UN CLIENTE
+                    Cliente c=new Cliente();
+                    if (request.getParameter("id")!=null) {
+                        if (validarCliente(request,c,err)) {
+                            //Guardar Cliente
+                            clienteDAO.guarda(c);
+                        } else {
+                            jsonOut=errToJSON(err).toString();
+                        }
+                    }       break;
+                }
+            default:
+                //LISTAR TODOS LOS CLIENTES
+                List<Cliente> lc = clienteDAO.buscaTodos();
+                jsonOut=clientesToJSON(lc).toString();
+                break;
         }
         //Return jsonOut code 
         try (PrintWriter writer = response.getWriter()) {

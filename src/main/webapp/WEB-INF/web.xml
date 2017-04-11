@@ -11,7 +11,6 @@
         </error-page>
     -->
     <!-- JAXRS declarative endpoint registration -->
-    <!--    
     <servlet>
         <servlet-name>javax.ws.rs.core.Application</servlet-name>
     </servlet>
@@ -19,5 +18,4 @@
         <servlet-name>javax.ws.rs.core.Application</servlet-name>        
         <url-pattern>/webservice/*</url-pattern>
     </servlet-mapping>
-    -->
 </web-app>

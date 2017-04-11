@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('clientesApp.controllers', [])
-  .controller('ClientesCtrl', ['ClientesDAOList',function(ClientesDAO) {
+  .controller('ClientesCtrl', ['ClientesDAOJson',function(ClientesDAO) {
 
     //DAO implementations available: ClientesDAOList, ClientesDAOJson
     //Change ClientesDAOList with ClientesDAOJson to access JSON Servlet (see implementation on services.js)
@@ -16,6 +16,7 @@ angular.module('clientesApp.controllers', [])
     this.editMode=false;
     this.cliente={};
     this.clientes=[];
+    this.errMsg="";
 
     //view actions
     this.crea=function () {
@@ -23,6 +24,7 @@ angular.module('clientesApp.controllers', [])
         this.editMode=true;
     };
     this.edita=function (id) {
+        this.reset();
         ClientesDAO.busca(id).then(function(cliente) {
                 self.cliente=cliente;
                 self.editMode=true;
@@ -32,35 +34,41 @@ angular.module('clientesApp.controllers', [])
         if (angular.isNumber(id)) {
             ClientesDAO.borra(id).then(this.updateClientes);
         };
-        this.reset();
+        //this.reset();
     };
     this.guarda=function (cliente) {
         if (cliente.id>0) {
           //Modify cliente data
-          ClientesDAO.guarda(cliente).then(this.updateClientes);
-      } else {
+          ClientesDAO.guarda(cliente).then(this.updateClientes).catch(this.errorDAO);
+        } else {
           //New cliente
           cliente.id=0;
-          ClientesDAO.crea(cliente).then(this.updateClientes);
-      }
-        this.reset();
+          ClientesDAO.crea(cliente).then(this.updateClientes).catch(this.errorDAO);                            
+        };
+      //  this.reset();
     };
     this.reset=function () {
         this.cliente={};
         this.editMode=false;
+        this.errMsg="";
     };
     this.updateClientes= function () {
         ClientesDAO.buscaTodos().then(function (clientes) {
-        //"this" can not be controller when this method is executed as callback. i.e. in DAO
+        //"this" can not be a controller when this method is executed as callback. i.e. in DAO
             self.clientes=clientes;
         });
+        self.reset();
+    };
+    this.errorDAO= function (response) {
+        self.errMsg= "La operación no ha podido completarse";
+        console.log( "Error en servidor: " + response.status +" "+ response.statusText );
     };
     //Init controller
     this.updateClientes();
     this.reset();
           
   }])  
-  .controller('ClientesRouteCtrl', ['$scope','$routeParams','$location','ClientesDAOList',function($scope,$routeParams,$location,ClientesDAO) {
+  .controller('ClientesRouteCtrl', ['$scope','$routeParams','$location','ClientesDAOJson',function($scope,$routeParams,$location,ClientesDAO) {
     //ClientesCtrl routing action version
 
     //used to access controller when some method is used as callback on other object
@@ -69,32 +77,32 @@ angular.module('clientesApp.controllers', [])
     //view model 
     this.cliente={};
     this.clientes=[];
+    this.errMsg="";
 
     //edita.html view button actions
     this.borra=function (id) {
         if (angular.isNumber(id)) {
-            ClientesDAO.borra(id).then(function (json) {
-               self.updateClientes(); 
-            });
+            ClientesDAO.borra(id).then(this.updateClientes).catch(this.errorDAO);
         };
     };
     this.guarda=function (cliente) {
-        if (cliente.id>0) {
-          //Modify cliente data
-          ClientesDAO.guarda(cliente).then(function (json) {
-              self.updateClientes();
-          });
+      if (cliente.id>0) {
+        //Modify cliente data
+        ClientesDAO.guarda(cliente).then(this.updateClientes).catch(this.errorDAO);
       } else {
-          //New cliente
-          cliente.id=0;
-          ClientesDAO.crea(cliente).then(function () {
-              self.updateClientes();
-          });
+        //New cliente
+        cliente.id=0;
+        ClientesDAO.crea(cliente).then(this.updateClientes).catch(this.errorDAO);
       }
     };
 
     this.updateClientes= function () {
         $location.path("/lista");  //Post-Redirect-Get
+    };
+
+    this.errorDAO= function (response) {
+        self.errMsg= "La operación no ha podido completarse";
+        console.log( "Error en servidor: " + response.status +" "+ response.statusText );
     };
 
     //Process path actions
@@ -105,21 +113,41 @@ angular.module('clientesApp.controllers', [])
         action=$location.path().match(/^\/?(\w+)/)[1];
     }
 
-    if (action=="visualiza" || action=="edita") {
+    switch(action) {
+        case "visualiza":
+        case "edita":
+            ClientesDAO.busca(idCliente).then(function (cliente) {           
+                self.cliente=cliente;
+                });
+            break;
+        case "crea":
+            this.cliente={};
+            break;
+        case "borra":
+            ClientesDAO.borra(idCliente).then(this.updateClientes
+                                   ).catch(this.errorDAO);
+            break;
+        default :
+            //default: action=="lista"
+            ClientesDAO.buscaTodos().then(function (clientes) {
+                self.clientes=clientes;
+            });                       
+    };
+/*
+          if (action==="visualiza" || action==="edita") {
         ClientesDAO.busca(idCliente).then(function (cliente) {
             self.cliente=cliente;
         });        
-    }else if (action=="crea") {
+    }else if (action==="crea") {
         this.cliente={};
-    }else if (action=="borra") {
-        ClientesDAO.borra(idCliente).then(function(json) { 
-            self.updateClientes();
-        });
+    }else if (action==="borra") {
+        ClientesDAO.borra(idCliente).then(this.updateClientes
+                                    ).catch(this.errorDAO);
     }else {
         //default: action=="lista"
         ClientesDAO.buscaTodos().then(function (clientes) {
             self.clientes=clientes;
         });       
     };                      
-                                 
+*/                                 
   }]);

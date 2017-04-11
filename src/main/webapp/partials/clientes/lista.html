@@ -1,4 +1,5 @@
 <div>
+    <div class="err">{{cliRtCtrl.errMsg}}</div>
     <table>
         <tr data-ng-repeat="c in cliRtCtrl.clientes" data-ng-click="cliRtCtrl.edita(c.id)">
             <td>{{c.id}}</td><td>{{c.nombre}}</td><td>{{c.dni}}</td><td>{{c.socio}}</td>
