@@ -112,7 +112,7 @@ angular.module('clientesApp.controllers', [])
         //extract action name from path
         action=$location.path().match(/^\/?(\w+)/)[1];
     }
-
+    console.log($location.path());
     switch(action) {
         case "visualiza":
         case "edita":
@@ -133,21 +133,5 @@ angular.module('clientesApp.controllers', [])
                 self.clientes=clientes;
             });                       
     };
-/*
-          if (action==="visualiza" || action==="edita") {
-        ClientesDAO.busca(idCliente).then(function (cliente) {
-            self.cliente=cliente;
-        });        
-    }else if (action==="crea") {
-        this.cliente={};
-    }else if (action==="borra") {
-        ClientesDAO.borra(idCliente).then(this.updateClientes
-                                    ).catch(this.errorDAO);
-    }else {
-        //default: action=="lista"
-        ClientesDAO.buscaTodos().then(function (clientes) {
-            self.clientes=clientes;
-        });       
-    };                      
-*/                                 
-  }]);
+
+ }]);  //ClientesRouteCtrl
