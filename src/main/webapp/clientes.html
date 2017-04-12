@@ -8,7 +8,6 @@
     <body  data-ng-controller="ClientesCtrl as cliCtrl">
         <h1>Gestión CRUD Clientes Angular</h1>
         <p>click en elemento para editar<p>
-        <div class="err">{{cliCtrl.errMsg}}</div>
         <table>
             <tr data-ng-repeat="c in cliCtrl.clientes" data-ng-click="cliCtrl.edita(c.id)">
                 <td>{{c.id}}</td><td>{{c.nombre}}</td><td>{{c.dni}}</td><td>{{c.socio}}</td>
@@ -17,6 +16,14 @@
         <button data-ng-click="cliCtrl.crea()">Nuevo</button>
         <a href="index.html">Inicio</a>
         <form novalidate class="form-css" name='frmClientes' data-ng-show='cliCtrl.editMode'>
+            <div class="err">
+                <!-- Server validation errors -->
+                <ul data-ng-show="cliCtrl.errMsgs.length>0">
+                    <li data-ng-repeat="err in cliCtrl.errMsgs">
+                        {{err.message}}
+                    </li>
+                </ul>
+            </div>
             ID: <span data-ng-bind='cliCtrl.cliente.id'></span><br/>
             Nombre: <input name='nombre' data-ng-model="cliCtrl.cliente.nombre" required/>
             <span id="errNombre" class="err" ng-show='frmClientes.nombre.$dirty && !frmClientes.nombre.$valid'>

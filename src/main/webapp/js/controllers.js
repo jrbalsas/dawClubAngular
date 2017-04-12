@@ -16,7 +16,7 @@ angular.module('clientesApp.controllers', [])
     this.editMode=false;
     this.cliente={};
     this.clientes=[];
-    this.errMsg="";
+    this.errMsgs=[];
 
     //view actions
     this.crea=function () {
@@ -28,39 +28,40 @@ angular.module('clientesApp.controllers', [])
         ClientesDAO.busca(id).then(function(cliente) {
                 self.cliente=cliente;
                 self.editMode=true;
-        });
+        }).catch(this.errorDAO);
     };      
     this.borra=function (id) {
         if (angular.isNumber(id)) {
-            ClientesDAO.borra(id).then(this.updateClientes);
+            ClientesDAO.borra(id).then(this.updateClientes
+                                 .catch(this.errorDAO));
         };
-        //this.reset();
     };
     this.guarda=function (cliente) {
         if (cliente.id>0) {
           //Modify cliente data
-          ClientesDAO.guarda(cliente).then(this.updateClientes).catch(this.errorDAO);
+          ClientesDAO.guarda(cliente).then(this.updateClientes
+                                    ).catch(this.errorDAO);
         } else {
           //New cliente
           cliente.id=0;
-          ClientesDAO.crea(cliente).then(this.updateClientes).catch(this.errorDAO);                            
+          ClientesDAO.crea(cliente).then(this.updateClientes
+                                  ).catch(this.errorDAO);                            
         };
-      //  this.reset();
     };
     this.reset=function () {
         this.cliente={};
         this.editMode=false;
-        this.errMsg="";
+        this.errMsgs=[];
     };
     this.updateClientes= function () {
         ClientesDAO.buscaTodos().then(function (clientes) {
-        //"this" can not be a controller when this method is executed as callback. i.e. in DAO
+        //"this" might not be a controller when this method is executed as callback. i.e. in DAO
             self.clientes=clientes;
         });
         self.reset();
     };
     this.errorDAO= function (response) {
-        self.errMsg= "La operación no ha podido completarse";
+        self.errMsgs= response.data; //JAX-RS BeanValidation errors
         console.log( "Error en servidor: " + response.status +" "+ response.statusText );
     };
     //Init controller
@@ -77,7 +78,7 @@ angular.module('clientesApp.controllers', [])
     //view model 
     this.cliente={};
     this.clientes=[];
-    this.errMsg="";
+    this.errMsgs=[];
 
     //edita.html view button actions
     this.borra=function (id) {
@@ -101,7 +102,7 @@ angular.module('clientesApp.controllers', [])
     };
 
     this.errorDAO= function (response) {
-        self.errMsg= "La operación no ha podido completarse";
+        self.errMsgs= response.data; //JAX-RS BeanValidation errors
         console.log( "Error en servidor: " + response.status +" "+ response.statusText );
     };
 
@@ -112,13 +113,13 @@ angular.module('clientesApp.controllers', [])
         //extract action name from path
         action=$location.path().match(/^\/?(\w+)/)[1];
     }
-    console.log($location.path());
+
     switch(action) {
         case "visualiza":
         case "edita":
             ClientesDAO.busca(idCliente).then(function (cliente) {           
                 self.cliente=cliente;
-                });
+            }).catch(this.errorDAO);
             break;
         case "crea":
             this.cliente={};
@@ -131,7 +132,7 @@ angular.module('clientesApp.controllers', [])
             //default: action=="lista"
             ClientesDAO.buscaTodos().then(function (clientes) {
                 self.clientes=clientes;
-            });                       
+            }).catch(this.errorDAO);                       
     };
 
  }]);  //ClientesRouteCtrl

@@ -10,6 +10,7 @@ Features:
 - Angular DAO Service implementation using internal array (testing purpose)
 - Angular DAO Service implementation using $http to access JSON Servlet
 - JAX-RS webservice for serving JSON contents
+-
 
 Usage:
 -------------

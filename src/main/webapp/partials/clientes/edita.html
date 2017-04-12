@@ -1,5 +1,13 @@
-<div class="err">{{cliRtCtrl.errMsg}}</div>
 <form novalidate class="form-css" name='frmClientes' >
+    <div class="err">
+        <!-- Server validation errors -->
+        <ul data-ng-show="cliRtCtrl.errMsgs.length>0">
+            <li data-ng-repeat="err in cliRtCtrl.errMsgs">
+                {{err.message}}
+            </li>
+        </ul>
+    </div>
+
     ID: <span data-ng-bind='cliRtCtrl.cliente.id'></span><br/>
     Nombre: <input name='nombre' data-ng-model="cliRtCtrl.cliente.nombre" required/>
     <span id="errNombre" ng-show='frmClientes.nombre.$dirty && !frmClientes.nombre.$valid'>

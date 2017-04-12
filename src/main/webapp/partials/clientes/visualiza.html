@@ -1,4 +1,11 @@
-<div class="err">{{cliRtCtrl.errMsg}}</div>
+<div class="err">
+    <!-- Server validation errors -->
+    <ul data-ng-show="cliRtCtrl.errMsgs.length>0">
+        <li data-ng-repeat="err in cliRtCtrl.errMsgs">
+            {{err.message}}
+        </li>
+    </ul>
+</div>
 <h1>Datos Cliente</h1>
     ID: {{cliRtCtrl.cliente.id}}<br>
     Nombre: {{cliRtCtrl.cliente.nombre}}<br>
