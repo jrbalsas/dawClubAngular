@@ -44,12 +44,12 @@ angular.module('clientesApp.services', [])
         function asyncOp (data) {
             var deferred= $q.defer();  //Create promise
             //create promise success method as in $http
-            deferred.promise.success= function (usrCallBack) {
-                deferred.promise.then(function(data){
-                    usrCallBack(data);
-                },
-                null);
-            };
+//            deferred.promise.success= function (usrCallBack) {
+//                deferred.promise.then(function(data){
+//                    usrCallBack(data);
+//                },
+//                null);
+//            };
             $timeout(function() {
                 deferred.resolve(data);
             }, 100);
@@ -108,20 +108,24 @@ angular.module('clientesApp.services', [])
     }])
     .service('ClientesDAOJson',['$http','$q','ObjUtil',function($http,$q,ObjUtil) {
         //DAO implementation which return promises (Angular way)
-        var srvUrl="clientesjson";
+        var srvUrl="webservice/clientes";
 
         this.buscaTodos = function () {
-                return $http.get(srvUrl);
+
+            return $http.get(srvUrl).then( function (response) {
+                    return response.data;
+                   });
         };
+
         this.busca = function (id) {
-                return $http.get(srvUrl+"/busca",{params: {id:id}});
+                return $http.get(srvUrl+"/"+id).then (function (response) {
+                    return response.data;
+                });
         };
         this.borra = function (id) {
-                if (id>0) {
-                  return $http.get(srvUrl+"/borra",{params: {id:id}});
-                };
+                  return $http.delete(srvUrl+"/"+id);
         };
-        this.guarda = function (cliente) {
+        this.guardaorig = function (cliente) {
                 if (cliente.id>0) {
                 //Modify cliente data
                     return $http.post(srvUrl+"/guarda",cliente
@@ -130,12 +134,24 @@ angular.module('clientesApp.services', [])
                         });
                 }            
         };
-        this.crea = function(cliente) {
+        this.guarda = function (cliente) {
+            return $http.put(srvUrl+"/"+cliente.id,cliente).then (function (response) {
+                return response.data;
+            });
+        };
+
+        this.creaorig = function(cliente) {
                 //New cliente
                 return $http.post(srvUrl+"/crea", cliente
                     ,{  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                         transformRequest:ObjUtil.toParam
                      });
         };
+        this.crea = function (cliente) {
+            return $http.post(srvUrl,cliente).then (function (response) {
+                return response.data;
+            });
+        };
+
     }]);
 

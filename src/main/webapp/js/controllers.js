@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('clientesApp.controllers', [])
-  .controller('ClientesCtrl', ['ClientesDAOList',function(ClientesDAO) {
+  .controller('ClientesCtrl', ['ClientesDAOJson',function(ClientesDAO) {
 
     //DAO implementations available: ClientesDAOList, ClientesDAOJson
     //Change ClientesDAOList with ClientesDAOJson to access JSON Servlet (see implementation on services.js)
@@ -16,6 +16,7 @@ angular.module('clientesApp.controllers', [])
     this.editMode=false;
     this.cliente={};
     this.clientes=[];
+    this.errMsgs=[];
 
     //view actions
     this.crea=function () {
@@ -23,75 +24,86 @@ angular.module('clientesApp.controllers', [])
         this.editMode=true;
     };
     this.edita=function (id) {
-        ClientesDAO.busca(id).success(function(cliente) {
+        this.reset();
+        ClientesDAO.busca(id).then(function(cliente) {
                 self.cliente=cliente;
                 self.editMode=true;
-        });
+        }).catch(this.errorDAO);
     };      
     this.borra=function (id) {
         if (angular.isNumber(id)) {
-            ClientesDAO.borra(id).success(this.updateClientes);
+            ClientesDAO.borra(id).then(this.updateClientes
+                                 .catch(this.errorDAO));
         };
-        this.reset();
     };
     this.guarda=function (cliente) {
         if (cliente.id>0) {
           //Modify cliente data
-          ClientesDAO.guarda(cliente).success(this.updateClientes);
-      } else {
+          ClientesDAO.guarda(cliente).then(this.updateClientes
+                                    ).catch(this.errorDAO);
+        } else {
           //New cliente
           cliente.id=0;
-          ClientesDAO.crea(cliente).success(this.updateClientes);
-      }
-        this.reset();
+          ClientesDAO.crea(cliente).then(this.updateClientes
+                                  ).catch(this.errorDAO);                            
+        };
     };
     this.reset=function () {
         this.cliente={};
         this.editMode=false;
+        this.errMsgs=[];
     };
     this.updateClientes= function () {
-        ClientesDAO.buscaTodos().success(function (clientes) {
-        //"this" can not be controller when this method is executed as callback. i.e. in DAO
+        ClientesDAO.buscaTodos().then(function (clientes) {
+        //"this" might not be a controller when this method is executed as callback. i.e. in DAO
             self.clientes=clientes;
         });
+        self.reset();
+    };
+    this.errorDAO= function (response) {
+        self.errMsgs= response.data; //JAX-RS BeanValidation errors
+        console.log( "Error en servidor: " + response.status +" "+ response.statusText );
     };
     //Init controller
     this.updateClientes();
     this.reset();
           
   }])  
-  .controller('ClientesRouteCtrl', ['$scope','$routeParams','$location','ClientesDAOList',function($scope,$routeParams,$location,ClientesDAO) {
+  .controller('ClientesRouteCtrl', ['$scope','$routeParams','$location','ClientesDAOJson',function($scope,$routeParams,$location,ClientesDAO) {
     //ClientesCtrl routing action version
 
-    //view model (traditional way (using $scope for view-model)
-    $scope.cliente={};
-    $scope.clientes=[];
+    //used to access controller when some method is used as callback on other object
+    var self=this;
+    
+    //view model 
+    this.cliente={};
+    this.clientes=[];
+    this.errMsgs=[];
 
     //edita.html view button actions
-    $scope.borra=function (id) {
+    this.borra=function (id) {
         if (angular.isNumber(id)) {
-            ClientesDAO.borra(id).success(function (json) {
-               $scope.updateClientes(); 
-            });
+            ClientesDAO.borra(id).then(this.updateClientes).catch(this.errorDAO);
         };
     };
-    $scope.guarda=function (cliente) {
-        if (cliente.id>0) {
-          //Modify cliente data
-          ClientesDAO.guarda(cliente).success(function (json) {
-              $scope.updateClientes();
-          });
+    this.guarda=function (cliente) {
+      if (cliente.id>0) {
+        //Modify cliente data
+        ClientesDAO.guarda(cliente).then(this.updateClientes).catch(this.errorDAO);
       } else {
-          //New cliente
-          cliente.id=0;
-          ClientesDAO.crea(cliente).success(function () {
-              $scope.updateClientes();
-          });
+        //New cliente
+        cliente.id=0;
+        ClientesDAO.crea(cliente).then(this.updateClientes).catch(this.errorDAO);
       }
     };
 
-    $scope.updateClientes= function () {
+    this.updateClientes= function () {
         $location.path("/lista");  //Post-Redirect-Get
+    };
+
+    this.errorDAO= function (response) {
+        self.errMsgs= response.data; //JAX-RS BeanValidation errors
+        console.log( "Error en servidor: " + response.status +" "+ response.statusText );
     };
 
     //Process path actions
@@ -102,21 +114,25 @@ angular.module('clientesApp.controllers', [])
         action=$location.path().match(/^\/?(\w+)/)[1];
     }
 
-    if (action=="visualiza" || action=="edita") {
-        ClientesDAO.busca(idCliente).success(function (cliente) {
-            $scope.cliente=cliente;
-        });        
-    }else if (action=="crea") {
-        $scope.cliente={};
-    }else if (action=="borra") {
-        ClientesDAO.borra(idCliente).success(function(json) { 
-            $scope.updateClientes();
-        });
-    }else {
-        //default: action=="lista"
-        ClientesDAO.buscaTodos().success(function (clientes) {
-            $scope.clientes=clientes;
-        });       
-    };                      
-                                 
-  }]);
+    switch(action) {
+        case "visualiza":
+        case "edita":
+            ClientesDAO.busca(idCliente).then(function (cliente) {           
+                self.cliente=cliente;
+            }).catch(this.errorDAO);
+            break;
+        case "crea":
+            this.cliente={};
+            break;
+        case "borra":
+            ClientesDAO.borra(idCliente).then(this.updateClientes
+                                   ).catch(this.errorDAO);
+            break;
+        default :
+            //default: action=="lista"
+            ClientesDAO.buscaTodos().then(function (clientes) {
+                self.clientes=clientes;
+            }).catch(this.errorDAO);                       
+    };
+
+ }]);  //ClientesRouteCtrl

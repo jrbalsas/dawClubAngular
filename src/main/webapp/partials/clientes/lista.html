@@ -1,12 +1,20 @@
 <div>
+    <div class="err">
+        <!-- Server errors -->
+        <ul data-ng-show="cliRtCtrl.errMsgs.length>0">
+            <li data-ng-repeat="err in cliRtCtrl.errMsgs">
+                {{err.message}}
+            </li>
+        </ul>
+    </div>
     <table>
-        <tr data-ng-repeat="c in clientes" data-ng-click="edita(c.id)">
+        <tr data-ng-repeat="c in cliRtCtrl.clientes" data-ng-click="cliRtCtrl.edita(c.id)">
             <td>{{c.id}}</td><td>{{c.nombre}}</td><td>{{c.dni}}</td><td>{{c.socio}}</td>
-            <td><a href="#/visualiza/{{c.id}}">Ver</a>
-                <a href="#/edita/{{c.id}}">Editar</a>
-                <a href="#/borra/{{c.id}}">Borrar</a>
+            <td><a href="#!/visualiza/{{c.id}}">Ver</a>
+                <a href="#!/edita/{{c.id}}">Editar</a>
+                <a href="#!/borra/{{c.id}}">Borrar</a>
             </td>
         </tr>
     </table>
-    <a href="#/crea">Nuevo</a>
+    <a href="#!/crea">Nuevo</a>
 </div>
