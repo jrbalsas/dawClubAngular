@@ -8,9 +8,8 @@ Features:
 - SPA implementation
 - SPA implementation using Routing & Partials
 - Angular DAO Service implementation using internal array (testing purpose)
-- Angular DAO Service implementation using $http to access JSON Servlet
+- Angular DAO Service implementation using $http to access JAX-RS webservice
 - JAX-RS webservice for serving JSON contents
--
 
 Usage:
 -------------
