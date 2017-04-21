@@ -4,20 +4,40 @@
 
 angular.module('clientesApp.services', [])
     .value('version', '0.1')
-    .factory('ObjUtil', function () {
-        return {
-            toParam: function (obj) {
-                    //Transform an object {prop1:val1, prop2:val2,...}
-                    //to a param string:  prop1=val1&prop2=val2...
-                    var str = [];
-                    for (var p in obj)
-                        if (obj.hasOwnProperty(p)) {
-                            str.push(p + "=" + obj[p]);
-                        }
-                    return str.join("&");
-                }
+    .service('ClientesDAOREST',['$http',function($http) {
+        //DAO REST implementation which return promises (Angular way)
+        var srvUrl="webservice/clientes";
+
+        this.buscaTodos = function () {
+
+            return $http.get(srvUrl).then( function (response) {
+                    return response.data;
+                   });
         };
-    })
+
+        this.busca = function (id) {
+                return $http.get(srvUrl+"/"+id).then (function (response) {
+                    return response.data;
+                });
+        };
+        
+        this.borra = function (id) {
+                  return $http.delete(srvUrl+"/"+id);
+        };
+        
+        this.guarda = function (cliente) {
+            return $http.put(srvUrl+"/"+cliente.id,cliente).then (function (response) {
+                return response.data;
+            });
+        };
+
+        this.crea = function (cliente) {
+            return $http.post(srvUrl,cliente).then (function (response) {
+                return response.data;
+            });
+        };
+
+    }])
     .service('ClientesDAOList',['$q','$timeout',function($q,$timeout) {
         //DAO over simple array for testing purposes
         //modern DAO returning promises to attach user callbacks
@@ -64,7 +84,7 @@ angular.module('clientesApp.services', [])
                 if (id>0) {
                   //Look for cliente
                   clientes.some(function(c,key) {
-                      if (c.id==id) {
+                      if (c.id===id) {
                           angular.copy(c,cliente);
                           return true;
                       };
@@ -77,7 +97,7 @@ angular.module('clientesApp.services', [])
                 if (id>0) {
                   //Borrar cliente
                   clientes.some(function(c,key) {
-                      if (c.id==id) {
+                      if (c.id===id) {
                           clientes.splice(key,1);
                           return true;
                       };
@@ -90,7 +110,7 @@ angular.module('clientesApp.services', [])
               if (cliente.id>0) {
                 //Modify cliente data
                 clientes.some(function(c,key) {
-                    if (c.id==cliente.id) {
+                    if (c.id===cliente.id) {
                         angular.copy(cliente,c);
                         return true;
                     };
@@ -104,54 +124,5 @@ angular.module('clientesApp.services', [])
                 cliente.id=idClientes++;
                 clientes.push(cliente);
                 return asyncOp(cliente);
-            }            
-    }])
-    .service('ClientesDAOJson',['$http','$q','ObjUtil',function($http,$q,ObjUtil) {
-        //DAO implementation which return promises (Angular way)
-        var srvUrl="webservice/clientes";
-
-        this.buscaTodos = function () {
-
-            return $http.get(srvUrl).then( function (response) {
-                    return response.data;
-                   });
-        };
-
-        this.busca = function (id) {
-                return $http.get(srvUrl+"/"+id).then (function (response) {
-                    return response.data;
-                });
-        };
-        this.borra = function (id) {
-                  return $http.delete(srvUrl+"/"+id);
-        };
-        this.guardaorig = function (cliente) {
-                if (cliente.id>0) {
-                //Modify cliente data
-                    return $http.post(srvUrl+"/guarda",cliente
-                        ,{  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                            transformRequest: ObjUtil.toParam
-                        });
-                }            
-        };
-        this.guarda = function (cliente) {
-            return $http.put(srvUrl+"/"+cliente.id,cliente).then (function (response) {
-                return response.data;
-            });
-        };
-
-        this.creaorig = function(cliente) {
-                //New cliente
-                return $http.post(srvUrl+"/crea", cliente
-                    ,{  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                        transformRequest:ObjUtil.toParam
-                     });
-        };
-        this.crea = function (cliente) {
-            return $http.post(srvUrl,cliente).then (function (response) {
-                return response.data;
-            });
-        };
-
+            };         
     }]);
-

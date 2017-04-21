@@ -3,10 +3,10 @@
 /* Controllers */
 
 angular.module('clientesApp.controllers', [])
-  .controller('ClientesCtrl', ['ClientesDAOJson',function(ClientesDAO) {
+  .controller('ClientesCtrl', ['ClientesDAOREST',function(clientesDAO) {
 
-    //DAO implementations available: ClientesDAOList, ClientesDAOJson
-    //Change ClientesDAOList with ClientesDAOJson to access JSON Servlet (see implementation on services.js)
+    //DAO implementations available: ClientesDAOREST, ClientesDAOList
+    //Change ClientesDAOREST with ClientesDAOList to access DAO in memory list
 
     //Controller version using promises from DAO (Angular way)
     //used to access controller when some method is used as callback on other object
@@ -25,26 +25,26 @@ angular.module('clientesApp.controllers', [])
     };
     this.edita=function (id) {
         this.reset();
-        ClientesDAO.busca(id).then(function(cliente) {
+        clientesDAO.busca(id).then(function(cliente) {
                 self.cliente=cliente;
                 self.editMode=true;
         }).catch(this.errorDAO);
     };      
     this.borra=function (id) {
         if (angular.isNumber(id)) {
-            ClientesDAO.borra(id).then(this.updateClientes
-                                 .catch(this.errorDAO));
+            clientesDAO.borra(id).then(this.updateClientes
+                                 ).catch(this.errorDAO);
         };
     };
     this.guarda=function (cliente) {
         if (cliente.id>0) {
           //Modify cliente data
-          ClientesDAO.guarda(cliente).then(this.updateClientes
+          clientesDAO.guarda(cliente).then(this.updateClientes
                                     ).catch(this.errorDAO);
         } else {
           //New cliente
           cliente.id=0;
-          ClientesDAO.crea(cliente).then(this.updateClientes
+          clientesDAO.crea(cliente).then(this.updateClientes
                                   ).catch(this.errorDAO);                            
         };
     };
@@ -54,7 +54,7 @@ angular.module('clientesApp.controllers', [])
         this.errMsgs=[];
     };
     this.updateClientes= function () {
-        ClientesDAO.buscaTodos().then(function (clientes) {
+        clientesDAO.buscaTodos().then(function (clientes) {
         //"this" might not be a controller when this method is executed as callback. i.e. in DAO
             self.clientes=clientes;
         });
@@ -68,8 +68,8 @@ angular.module('clientesApp.controllers', [])
     this.updateClientes();
     this.reset();
           
-  }])  
-  .controller('ClientesRouteCtrl', ['$scope','$routeParams','$location','ClientesDAOJson',function($scope,$routeParams,$location,ClientesDAO) {
+  }])  //End ClientesCtrl controller
+  .controller('ClientesRouteCtrl', ['$scope','$routeParams','$location','ClientesDAOREST',function($scope,$routeParams,$location,clientesDAO) {
     //ClientesCtrl routing action version
 
     //used to access controller when some method is used as callback on other object
@@ -83,17 +83,17 @@ angular.module('clientesApp.controllers', [])
     //edita.html view button actions
     this.borra=function (id) {
         if (angular.isNumber(id)) {
-            ClientesDAO.borra(id).then(this.updateClientes).catch(this.errorDAO);
+            clientesDAO.borra(id).then(this.updateClientes).catch(this.errorDAO);
         };
     };
     this.guarda=function (cliente) {
       if (cliente.id>0) {
         //Modify cliente data
-        ClientesDAO.guarda(cliente).then(this.updateClientes).catch(this.errorDAO);
+        clientesDAO.guarda(cliente).then(this.updateClientes).catch(this.errorDAO);
       } else {
         //New cliente
         cliente.id=0;
-        ClientesDAO.crea(cliente).then(this.updateClientes).catch(this.errorDAO);
+        clientesDAO.crea(cliente).then(this.updateClientes).catch(this.errorDAO);
       }
     };
 
@@ -117,7 +117,7 @@ angular.module('clientesApp.controllers', [])
     switch(action) {
         case "visualiza":
         case "edita":
-            ClientesDAO.busca(idCliente).then(function (cliente) {           
+            clientesDAO.busca(idCliente).then(function (cliente) {           
                 self.cliente=cliente;
             }).catch(this.errorDAO);
             break;
@@ -125,12 +125,12 @@ angular.module('clientesApp.controllers', [])
             this.cliente={};
             break;
         case "borra":
-            ClientesDAO.borra(idCliente).then(this.updateClientes
+            clientesDAO.borra(idCliente).then(this.updateClientes
                                    ).catch(this.errorDAO);
             break;
         default :
             //default: action=="lista"
-            ClientesDAO.buscaTodos().then(function (clientes) {
+            clientesDAO.buscaTodos().then(function (clientes) {
                 self.clientes=clientes;
             }).catch(this.errorDAO);                       
     };
