@@ -11,19 +11,4 @@
         </error-page>
     -->
 
-    <!-- JAXRS declarative endpoint registration -->
-    <servlet>
-        <servlet-name>javax.ws.rs.core.Application</servlet-name>
-        <!-- Configure JAX-RS implementation for sending BeanValidation messages -->
-        <init-param>
-            <param-name>
-                jersey.config.beanValidation.enableOutputValidationErrorEntity.server
-            </param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>javax.ws.rs.core.Application</servlet-name>        
-        <url-pattern>/webservice/*</url-pattern>
-    </servlet-mapping>
 </web-app>
