@@ -1,74 +1,77 @@
 'use strict';
 
 /* Controllers */
+class ClientesCtrl { 
 
-angular.module('clientesApp.controllers', [])
-  .controller('ClientesCtrl', ['ClientesDAOREST',function(clientesDAO) {
-
-    //DAO implementations available: ClientesDAOREST, ClientesDAOList
-    //Change ClientesDAOREST with ClientesDAOList to access DAO in memory list
-
-    //Controller version using promises from DAO (Angular way)
-    //used to access controller when some method is used as callback on other object
-    var self=this;
-    
-    //view model (new way (using controller attributes for view-model)
-    this.editMode=false;
-    this.cliente={};
-    this.clientes=[];
-    this.errMsgs=[];
-
+    constructor (clientesDAO) {
+        this.clientesDAO=clientesDAO;
+        //view model
+        this.editMode=false;
+        this.cliente={};
+        this.clientes=[];
+        this.errMsgs=[];
+        //Init controller
+        this.updateClientes();
+        this.reset();
+    }
     //view actions
-    this.crea=function () {
+    crea () {
         this.reset();
         this.editMode=true;
-    };
-    this.edita=function (id) {
+    }
+    edita (id) {
         this.reset();
-        clientesDAO.busca(id).then(function(cliente) {
-                self.cliente=cliente;
-                self.editMode=true;
+        this.clientesDAO.busca(id).then( cliente => {
+                this.cliente=cliente;
+                this.editMode=true;
         }).catch(this.errorDAO);
-    };      
-    this.borra=function (id) {
+    }      
+    borra (id) {
         if (angular.isNumber(id)) {
-            clientesDAO.borra(id).then(this.updateClientes
-                                 ).catch(this.errorDAO);
+            this.clientesDAO.borra(id)
+                  .then( ()=>this.updateClientes() )
+                  .catch(response => this.errorDAO(response));
+
         };
-    };
-    this.guarda=function (cliente) {
+    }
+    guarda (cliente) {
         if (cliente.id>0) {
           //Modify cliente data
-          clientesDAO.guarda(cliente).then(this.updateClientes
-                                    ).catch(this.errorDAO);
+          this.clientesDAO.guarda(cliente)
+                  .then( ()=>this.updateClientes() )
+                  .catch(response => this.errorDAO(response));
         } else {
           //New cliente
           cliente.id=0;
-          clientesDAO.crea(cliente).then(this.updateClientes
-                                  ).catch(this.errorDAO);                            
+          this.clientesDAO.crea(cliente)
+                  .then( ()=>this.updateClientes() )
+                  .catch(response => this.errorDAO(response));
         };
-    };
-    this.reset=function () {
+    }
+    reset () {
         this.cliente={};
         this.editMode=false;
         this.errMsgs=[];
-    };
-    this.updateClientes= function () {
-        clientesDAO.buscaTodos().then(function (clientes) {
-        //"this" might not be a controller when this method is executed as callback. i.e. in DAO
-            self.clientes=clientes;
-        });
-        self.reset();
-    };
-    this.errorDAO= function (response) {
-        self.errMsgs= response.data; //JAX-RS BeanValidation errors
+    }
+    //Util methods
+    updateClientes () {
+        this.clientesDAO.buscaTodos()
+                .then( clientes => {
+                    this.clientes=clientes;
+                });
+        this.reset();
+    }
+    errorDAO (response) {
+        this.errMsgs= response.data; //JAX-RS BeanValidation errors
         console.log( "Error en servidor: " + response.status +" "+ response.statusText );
-    };
-    //Init controller
-    this.updateClientes();
-    this.reset();
+    }
           
-  }])  //End ClientesCtrl controller
+  };
+  
+//ClientesCtrl.$inject = ['ClientesDAOREST'];
+
+angular.module('clientesApp.controllers', [])
+  .controller('ClientesCtrl', ['ClientesDAOREST', ClientesCtrl ] )
   .controller('ClientesRouteCtrl', ['$scope','$routeParams','$location','ClientesDAOREST',function($scope,$routeParams,$location,clientesDAO) {
     //ClientesCtrl routing action version
 
@@ -136,3 +139,4 @@ angular.module('clientesApp.controllers', [])
     };
 
  }]);  //ClientesRouteCtrl
+
