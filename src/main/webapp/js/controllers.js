@@ -1,120 +1,88 @@
 'use strict';
 
-/* Controllers */
-class ClientesCtrl { 
+/** View controller */
+class ClientesCtrl {
 
-    constructor (clientesDAO) {
-        this.clientesDAO=clientesDAO;
+    constructor(clientesDAO) {
+        this.clientesDAO = clientesDAO;
     }
-    
-    $onInit () {
+
+    $onInit() {
         //Init view model
-        this.editMode=false;
-        this.cliente={};
-        this.clientes=[];
-        this.errMsgs=[];
+        this.editMode = false;
+        this.cliente = {};
+        this.clientes = [];
+        this.errMsgs = [];
         //Init view
         this.updateClientes();
-        this.reset();        
+        this.reset();
     }
-    
+
     //view actions
-    crea () {
+    crea() {
         this.reset();
-        this.editMode=true;
+        this.editMode = true;
     }
-    edita (id) {
+    edita(id) {
         this.reset();
-        this.clientesDAO.busca(id).then( cliente => {
-                this.cliente=cliente;
-                this.editMode=true;
-        }).catch(this.errorDAO);
-    }      
-    borra (id) {
+        this.clientesDAO.busca(id).then(cliente => {
+            this.cliente = cliente;
+            this.editMode = true;
+        }).catch(response => this.errorDAO(response));
+    }
+    borra(id) {
         if (angular.isNumber(id)) {
             this.clientesDAO.borra(id)
-                  .then( ()=>this.updateClientes() )
-                  .catch(response => this.errorDAO(response));
+                    .then(() => this.updateClientes())
+                    .catch(response => this.errorDAO(response));
 
-        };
+        }
+        ;
     }
-    guarda (cliente) {
-        if (cliente.id>0) {
-          //Modify cliente data
-          this.clientesDAO.guarda(cliente)
-                  .then( ()=>this.updateClientes() )
-                  .catch(response => this.errorDAO(response));
+    guarda(cliente) {
+        if (cliente.id > 0) {
+            //Modify cliente data
+            this.clientesDAO.guarda(cliente)
+                    .then(() => this.updateClientes())
+                    .catch(response => this.errorDAO(response));
         } else {
-          //New cliente
-          cliente.id=0;
-          this.clientesDAO.crea(cliente)
-                  .then( ()=>this.updateClientes() )
-                  .catch(response => this.errorDAO(response));
-        };
-    }
-    reset () {
-        this.cliente={};
-        this.editMode=false;
-        this.errMsgs=[];
+            //New cliente
+            cliente.id = 0;
+            this.clientesDAO.crea(cliente)
+                    .then(() => this.updateClientes())
+                    .catch(response => this.errorDAO(response));
+        }
+        ;
     }
     //Util methods
-    updateClientes () {
+    reset() {
+        this.cliente = {};
+        this.editMode = false;
+        this.errMsgs = [];
+    }
+    updateClientes() {
         this.clientesDAO.buscaTodos()
-                .then( clientes => {
-                    this.clientes=clientes;
-                });
+                .then(clientes => this.clientes = clientes)
+                .catch(response => this.errorDAO(response));
         this.reset();
     }
-    errorDAO (response) {
-        this.errMsgs= response.data; //JAX-RS BeanValidation errors
-        console.log( "Error en servidor: " + response.status +" "+ response.statusText );
+    errorDAO(response) {
+        this.errMsgs = response.data; //JAX-RS BeanValidation errors
+        console.log("Error en servidor: " + response.status + " " + response.statusText);
     }
-          
-  };
-  
-//ClientesCtrl.$inject = ['ClientesDAOREST'];
 
+} //ClientesCtrl
+
+/** Routing View controller */
 class ClientesRouteCtrl {
-    constructor ($routeParams,$location,clientesDAO) {
+    constructor($routeParams, $location, clientesDAO) {
         //Dependency injection
-        this.$routeParams=$routeParams;
-        this.$location=$location;
-        this.clientesDAO=clientesDAO;
-        
+        this.$routeParams = $routeParams;
+        this.$location = $location;
+        this.clientesDAO = clientesDAO;
+
+        //Process routing request
         this.$onInit();
-
-    }
-
-    //edita.html view button actions
-    borra (id) {
-        if (angular.isNumber(id)) {
-            this.clientesDAO.borra(id)
-                    .then(  () => this.updateClientes() )
-                    .catch( response => this.errorDAO(response) );
-        };
-    }
-    guarda (cliente) {
-      if (cliente.id>0) {
-        //Modify cliente data
-        this.clientesDAO.guarda(cliente)
-                    .then(  () => this.updateClientes() )
-                    .catch( response => this.errorDAO(response) );
-      } else {
-        //New cliente
-        cliente.id=0;
-        this.clientesDAO.crea(cliente)
-                    .then(  () => this.updateClientes() )
-                    .catch( response => this.errorDAO(response) );
-      }
-    }
-
-    updateClientes () {
-        this.$location.path("/lista");  //Post-Redirect-Get
-    }
-
-    errorDAO (response) {
-        this.errMsgs= response.data; //JAX-RS BeanValidation errors
-        console.log( "Error en servidor: " + response.status +" "+ response.statusText );
     }
 
     $onInit() {
@@ -135,28 +103,62 @@ class ClientesRouteCtrl {
             case "visualiza":
             case "edita":
                 this.clientesDAO.busca(idCliente)
-                        .then( cliente => this.cliente = cliente )
-                        .catch( response => this.errorDAO (response) );
+                        .then(cliente => this.cliente = cliente)
+                        .catch(response => this.errorDAO(response));
                 break;
             case "crea":
                 this.cliente = {};
                 break;
             case "borra":
                 this.clientesDAO.borra(idCliente)
-                    .then(  () => this.updateClientes() )
-                    .catch( response => this.errorDAO(response) );
+                        .then(() => this.updateClientes())
+                        .catch(response => this.errorDAO(response));
                 break;
             default :
                 //default: action=="lista"
                 this.clientesDAO.buscaTodos()
-                        .then( clientes => this.clientes = clientes )
-                        .catch( response => this.errorDAO(response) );
+                        .then(clientes => this.clientes = clientes)
+                        .catch(response => this.errorDAO(response));
         }
     }
 
- };
+    //edita.html view button actions
+    borra(id) {
+        if (angular.isNumber(id)) {
+            this.clientesDAO.borra(id)
+                    .then(() => this.updateClientes())
+                    .catch(response => this.errorDAO(response));
+        }
+        ;
+    }
+    guarda(cliente) {
+        if (cliente.id > 0) {
+            //Modify cliente data
+            this.clientesDAO.guarda(cliente)
+                    .then(() => this.updateClientes())
+                    .catch(response => this.errorDAO(response));
+        } else {
+            //New cliente
+            cliente.id = 0;
+            this.clientesDAO.crea(cliente)
+                    .then(() => this.updateClientes())
+                    .catch(response => this.errorDAO(response));
+        }
+    }
+    //Util methods
+    updateClientes() {
+        this.$location.path("/lista");  //Post-Redirect-Get
+    }
 
+    errorDAO(response) {
+        this.errMsgs = response.data; //JAX-RS BeanValidation errors
+        console.log("Error en servidor: " + response.status + " " + response.statusText);
+    }
+
+} //ClientesRouteCtrl
+
+/** Angular module for controllers */
 angular.module('clientesApp.controllers', [])
-  .controller('ClientesCtrl', ['ClientesDAOREST', ClientesCtrl ] )
-  .controller('ClientesRouteCtrl', ['$routeParams','$location','ClientesDAOREST',ClientesRouteCtrl]);
+        .controller('ClientesCtrl', ['ClientesDAOREST', ClientesCtrl])
+        .controller('ClientesRouteCtrl', ['$routeParams', '$location', 'ClientesDAOREST', ClientesRouteCtrl]);
 

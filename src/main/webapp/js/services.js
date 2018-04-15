@@ -2,9 +2,9 @@
 
 /* Services */
 
+/** DAO implementation using Angular service $http */
 class ClientesDAOREST {
     constructor($http) {
-        //DAO REST implementation which return promises (Angular way)
         this.$http = $http;
 
         this.srvUrl = "webservice/clientes";
@@ -30,13 +30,15 @@ class ClientesDAOREST {
         return this.$http.post(this.srvUrl, cliente).then(response => response.data);
     }
 
-}
+} //ClienteDAORest
+
+/**DAO over simple array for testing purposes
+ Returns promises to attach user callbacks
+ Used for compatibility with DAO remote implementation methods*/
 
 class ClientesDAOList {
+
     constructor($q, $timeout) {
-        //DAO over simple array for testing purposes
-        //modern DAO returning promises to attach user callbacks
-        //Used for compatibility with DAO remote implementation methods
         this.$q=$q;
         this.$timeout=$timeout;
 
@@ -126,8 +128,10 @@ class ClientesDAOList {
         this.clientes.push(cliente);
         return this.asyncOp(cliente);
     }
-}
+} //ClientesDAOList
 
+
+/* Register DAOs as Angular services */
 angular.module('clientesApp.services', [])
         .value('version', '0.1')
         .service('ClientesDAOList', ['$q', '$timeout', ClientesDAOList])
