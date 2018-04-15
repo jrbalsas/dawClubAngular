@@ -1,14 +1,14 @@
 <div>
     <div class="err">
         <!-- Server errors -->
-        <ul data-ng-show="cliRtCtrl.errMsgs.length>0">
-            <li data-ng-repeat="err in cliRtCtrl.errMsgs">
+        <ul data-ng-show="$ctrl.errMsgs.length>0">
+            <li data-ng-repeat="err in $ctrl.errMsgs">
                 {{err.message}}
             </li>
         </ul>
     </div>
     <table>
-        <tr data-ng-repeat="c in cliRtCtrl.clientes" data-ng-click="cliRtCtrl.edita(c.id)">
+        <tr data-ng-repeat="c in $ctrl.clientes" data-ng-click="$ctrl.edita(c.id)">
             <td>{{c.id}}</td><td>{{c.nombre}}</td><td>{{c.dni}}</td><td>{{c.socio}}</td>
             <td><a href="#!/visualiza/{{c.id}}">Ver</a>
                 <a href="#!/edita/{{c.id}}">Editar</a>

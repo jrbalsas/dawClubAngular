@@ -1,15 +1,15 @@
 <div class="err">
     <!-- Server validation errors -->
-    <ul data-ng-show="cliRtCtrl.errMsgs.length>0">
-        <li data-ng-repeat="err in cliRtCtrl.errMsgs">
+    <ul data-ng-show="$ctrl.errMsgs.length>0">
+        <li data-ng-repeat="err in $ctrl.errMsgs">
             {{err.message}}
         </li>
     </ul>
 </div>
 <h1>Datos Cliente</h1>
-    ID: {{cliRtCtrl.cliente.id}}<br>
-    Nombre: {{cliRtCtrl.cliente.nombre}}<br>
-    DNI:{{cliRtCtrl.cliente.dni}}<br>
-    Socio: {{cliRtCtrl.cliente.socio?'Sí':'No'}}<br>
-    <p><a href='#!/edita/{{cliRtCtrl.cliente.id}}'>Edita</a>&nbsp;
+    ID: {{$ctrl.cliente.id}}<br>
+    Nombre: {{$ctrl.cliente.nombre}}<br>
+    DNI:{{$ctrl.cliente.dni}}<br>
+    Socio: {{$ctrl.cliente.socio?'Sí':'No'}}<br>
+    <p><a href='#!/edita/{{$ctrl.cliente.id}}'>Edita</a>&nbsp;
         <a href='#!/lista'>Volver</a></p>   
