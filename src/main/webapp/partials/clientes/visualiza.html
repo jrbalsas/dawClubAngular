@@ -2,19 +2,17 @@
     <h2>Opciones</h2>
     <ul class=" nav nav-pills nav-stacked">
         <li><a href="index.html">Inicio</a></li>
-        <li class=""><a href="#!/lista" id="btEdita" >Volver</a></li>
-        <li class="active"><a href="#!/edita/{{$ctrl.cliente.id}}" id="btEdita" >Editar</a></li>
+        <li class=""><a href="#!/lista" id="btLista" >Volver</a></li>
+        <li class="active"><a ng-href="#!/edita/{{$ctrl.cliente.id}}" id="btEdita" >Editar</a></li>
     </ul>
 </nav>
 <section class="col-md-10">
     <h2>Datos del cliente</h2>
 
-    <!-- Server errors -->
-    <div data-ng-show="$ctrl.errMsgs.length > 0">
-        <p class="text-danger" data-ng-repeat="err in $ctrl.errMsgs">
-            {{err.message}}
-        </p>
-    </div>
+    <!-- Custom component sample -->
+    <!-- Show server validation errors -->
+    <errores msgs="$ctrl.errMsgs" ></errores>
+
     <!-- Clientes View -->
     <div class="panel panel-default">
         <ul class="panel-body list-group">

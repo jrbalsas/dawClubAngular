@@ -9,12 +9,10 @@
 <section class="col-md-10">
     <h2>Editar datos del cliente</h2>
 
-    <!-- Server errors -->
-    <div data-ng-show="$ctrl.errMsgs.length > 0">
-        <p class="text-danger" data-ng-repeat="err in $ctrl.errMsgs">
-            {{err.message}}
-        </p>
-    </div>
+    <!-- Custom component sample -->
+    <!-- Show server validation errors -->
+    <errores msgs="$ctrl.errMsgs" ></errores>
+
     <!-- Clientes Edit Form View -->
 
     <form novalidate  name='frmClientes' class="well">

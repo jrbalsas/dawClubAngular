@@ -45,6 +45,10 @@
             <section class="col-md-10">
                 <h2>Gestión CRUD Clientes AngularJS (view controller) </h2>
 
+                <!-- Custom component sample -->
+                <!-- Show server validation errors -->
+                <errores msgs="$ctrl.errMsgs" ></errores>
+
                 <!-- Clientes Datatable -->
                 <div data-ng-if="!$ctrl.editMode" >
                     <p>click en elemento para editar</p>
@@ -61,14 +65,7 @@
                 <!-- Clientes modal EDIT form-->
                 <div data-ng-if="$ctrl.editMode" >
                     <form novalidate  name='frmClientes' class="well">
-                        <div class="err">
-                            <!-- Server validation errors -->
-                            <div data-ng-show="$ctrl.errMsgs.length > 0">
-                                <p data-ng-repeat="err in $ctrl.errMsgs" class="text-danger">
-                                    {{err.message}}
-                                </p>
-                            </div>
-                        </div>
+
                         <div class="form-group">
 
                             <label>ID: <span data-ng-bind='$ctrl.cliente.id'></span></label>
@@ -96,8 +93,10 @@
                         <button data-ng-click="$ctrl.reset()" class="btn btn-default"  >Cancelar</button>
                     </form>
                 </div>
-                <!-- Custom directive sample-->
-                <cliente datos="$ctrl.cliente"/>    
+                <!-- Custom component sample-->
+
+                <cliente datos="$ctrl.cliente"></cliente>
+
             </section>
         </main>
         <footer class="panel panel-default well">
