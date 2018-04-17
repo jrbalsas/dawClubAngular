@@ -3,23 +3,45 @@
     <head>
         <meta charset="UTF-8">
         <title>Gestión Clientes</title>
-        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+
+        <!-- Bootstrap dependencies-->
+        <script defer src="//code.jquery.com/jquery-3.3.1.min.js" ></script>
+        <script defer src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>        
+
         <link rel="stylesheet"  href="css/app.css"/>
 
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-                
-        <!-- App modules -->
-        <script src="js/app.js"></script>
-        <script src="js/directives.js"></script>        
-        <script src="js/services.js"></script>
-        <script src="js/controllers.js"></script>
-    </head>
-    <body>
-        <h1>Gestión CRUD Clientes Angular with Routing and Partials</h1>
-        <div ng-view></div>
-        <p><a href="index.html">Inicio</a></p>
+        <!-- Angular Dependencies -->
+        <script defer src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
+        <script defer src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
 
+        <!-- App modules -->
+        <script defer src="js/app.js"></script>
+        <script defer src="js/directives.js"></script>        
+        <script defer src="js/services.js"></script>
+        <script defer src="js/controllers.js"></script>
+    </head>
+    <body class="container">
+        <header class="page-header">
+            <h1>
+                <a href="index.html"><img src="images/logo.png"></a>
+                Club de Tenis
+            </h1>
+        </header>
+        <main class="row">
+            <div ng-view></div>
+        </main>
+        <footer class="panel panel-default well">
+            <div class="panel-body">
+            </div>
+        </footer>
 
     </body>
 </html>

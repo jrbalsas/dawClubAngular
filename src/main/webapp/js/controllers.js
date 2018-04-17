@@ -37,7 +37,6 @@ class ClientesCtrl {
                     .catch(response => this.errorDAO(response));
 
         }
-        ;
     }
     guarda(cliente) {
         if (cliente.id > 0) {
@@ -52,7 +51,6 @@ class ClientesCtrl {
                     .then(() => this.updateClientes())
                     .catch(response => this.errorDAO(response));
         }
-        ;
     }
     //Util methods
     reset() {
@@ -129,7 +127,6 @@ class ClientesRouteCtrl {
                     .then(() => this.updateClientes())
                     .catch(response => this.errorDAO(response));
         }
-        ;
     }
     guarda(cliente) {
         if (cliente.id > 0) {

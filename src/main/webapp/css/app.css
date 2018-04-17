@@ -15,3 +15,7 @@
 .form-css .ng-invalid {
     color: red;
 }
+
+.c-pointer {
+    cursor: pointer;
+}

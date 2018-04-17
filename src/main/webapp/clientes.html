@@ -3,52 +3,106 @@
     <head>
         <meta charset="UTF-8">
         <title>Gestión Clientes</title>
-        <link rel="stylesheet"  href="css/app.css"/>
-        <!-- Angular Dependencies -->
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-        <!-- App modules -->
-        <script src="js/app.js"></script>
-        <script src="js/directives.js"></script>        
-        <script src="js/services.js"></script>
-        <script src="js/controllers.js"></script>        
-    </head>
-    <body  data-ng-controller="ClientesCtrl as $ctrl" ng-cloak>
-        <h1>Gestión CRUD Clientes Angular</h1>
-        <p>click en elemento para editar<p>
-        <table>
-            <tr data-ng-repeat="c in $ctrl.clientes" data-ng-click="$ctrl.edita(c.id)">
-                <td ng-bind="c.id"></td><td ng-bind="c.nombre"></td><td ng-bind="c.dni"></td><td ng-bind="c.socio"></td>
-            </tr>
-        </table>
-        <button data-ng-click="$ctrl.crea()">Nuevo</button>
-        <a href="index.html">Inicio</a>
-        <form novalidate class="form-css" name='frmClientes' data-ng-show='$ctrl.editMode'>
-            <div class="err">
-                <!-- Server validation errors -->
-                <ul data-ng-show="$ctrl.errMsgs.length>0">
-                    <li data-ng-repeat="err in $ctrl.errMsgs">
-                        {{err.message}}
-                    </li>
-                </ul>
-            </div>
-            ID: <span data-ng-bind='$ctrl.cliente.id'></span><br/>
-            Nombre: <input name='nombre' data-ng-model="$ctrl.cliente.nombre" required/>
-            <span id="errNombre" class="err" ng-show='frmClientes.nombre.$dirty && !frmClientes.nombre.$valid'>
-                El nombre es obligatorio
-            </span><br/>
-            DNI: <input name="Dni" data-ng-model="$ctrl.cliente.dni" ng-pattern='/^\d{7,8}(-?[a-z])?$/i'/>
-            <span id="errDni" ng-show='frmClientes.Dni.$dirty && !frmClientes.Dni.$valid'>
-                El DNI no es de la forma 12345678-A
-            </span><br/>
-            Socio: <input type="checkbox" id="ibSocio" data-ng-model="$ctrl.cliente.socio"/><br/>
-            <button data-ng-click="$ctrl.guarda($ctrl.cliente)" data-ng-disabled='!frmClientes.$valid'>Guardar</button>
-            <button data-ng-click="$ctrl.borra($ctrl.cliente.id)" data-ng-disabled='!($ctrl.cliente.id>0)'>Borrar</button>
-            <button data-ng-click="$ctrl.reset()">Cancelar</button>
-        </form>
-        {{$ctrl.cliente.nombre}}
-        <!-- Custom directive sample-->
-        <cliente datos="$ctrl.cliente"/>    
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+
+        <!-- Bootstrap dependencies-->
+        <script async src="//code.jquery.com/jquery-3.3.1.min.js" ></script>
+        <script defer src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>        
+
+        <link rel="stylesheet"  href="css/app.css"/>
+
+        <!-- Angular Dependencies -->
+        <script  src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
+        <script  src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+        <!-- App modules -->
+        <script  src="js/app.js"></script>
+        <script  src="js/directives.js"></script>        
+        <script  src="js/services.js"></script>
+        <script  src="js/controllers.js"></script>        
+    </head>
+    <body  data-ng-controller="ClientesCtrl as $ctrl" ng-cloak class="container">
+        <header class="page-header">
+            <h1>
+                <a href="index.html"><img src="images/logo.png"></a>
+                Club de Tenis
+            </h1>
+        </header>
+        <main class="row">
+            <nav class="col-md-2">
+                <h2>Opciones</h2>
+                <ul class=" nav nav-pills nav-stacked">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="active"><a href="#" id="btCrea" data-ng-click="$ctrl.crea()">Nuevo Cliente</a></li>
+                </ul>
+            </nav>
+            <section class="col-md-10">
+                <h2>Gestión CRUD Clientes AngularJS (view controller) </h2>
+
+                <!-- Clientes Datatable -->
+                <div data-ng-if="!$ctrl.editMode" >
+                    <p>click en elemento para editar</p>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr><th>ID</th><th>Nombre</th><th>DNI</th><th>Socio</th>
+                            </tr>
+                        </thead>
+                        <tr class="c-pointer" data-ng-repeat="c in $ctrl.clientes" data-ng-click="$ctrl.edita(c.id)" data-toggle="modal" data-target="#edCliente">
+                            <td ng-bind="c.id"></td><td ng-bind="c.nombre"></td><td ng-bind="c.dni"></td><td ng-bind="c.socio"></td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- Clientes modal EDIT form-->
+                <div data-ng-if="$ctrl.editMode" >
+                    <form novalidate  name='frmClientes' class="well">
+                        <div class="err">
+                            <!-- Server validation errors -->
+                            <div data-ng-show="$ctrl.errMsgs.length > 0">
+                                <p data-ng-repeat="err in $ctrl.errMsgs" class="text-danger">
+                                    {{err.message}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <label>ID: <span data-ng-bind='$ctrl.cliente.id'></span></label>
+                        </div>                                                    
+                        <div class="form-group">
+
+                            <label>Nombre: <input name='nombre' data-ng-model="$ctrl.cliente.nombre" required  class="form-control"/></label>
+                            <span id="errNombre" class="text-danger" ng-show='frmClientes.nombre.$dirty && !frmClientes.nombre.$valid'>
+                                El nombre es obligatorio
+                            </span>
+                        </div>
+                        <div class="form-group">
+
+                            <label>DNI: <input name="Dni" data-ng-model="$ctrl.cliente.dni" ng-pattern='/^\d{7,8}(-?[a-z])?$/i'  class="form-control"/></label>
+                            <span id="errDni" class="text-danger" ng-show='frmClientes.Dni.$dirty && !frmClientes.Dni.$valid'>
+                                El DNI no es de la forma 12345678-A
+                            </span>
+                        </div>
+                        <div class="form-group">
+
+                            <label>Socio: <input type="checkbox" id="ibSocio" data-ng-model="$ctrl.cliente.socio"  class="form-control"/></label>
+                        </div>
+                        <button data-ng-click="$ctrl.guarda($ctrl.cliente)" data-ng-disabled='!frmClientes.$valid' class="btn btn-primary" >Guardar</button>
+                        <button data-ng-click="$ctrl.borra($ctrl.cliente.id)" data-ng-disabled='!($ctrl.cliente.id > 0)' class="btn btn-danger" >Borrar</button>
+                        <button data-ng-click="$ctrl.reset()" class="btn btn-default"  >Cancelar</button>
+                    </form>
+                </div>
+                <!-- Custom directive sample-->
+                <cliente datos="$ctrl.cliente"/>    
+            </section>
+        </main>
+        <footer class="panel panel-default well">
+            <div class="panel-body">
+            </div>
+        </footer>
     </body>
 </html>
