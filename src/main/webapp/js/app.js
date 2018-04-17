@@ -4,7 +4,7 @@
 angular.module('clientesApp', [
   'ngRoute',
   'clientesApp.services',
-  'clientesApp.directives',
+  'clientesApp.components',
   'clientesApp.controllers'
 ]).
 config(['$routeProvider', function($routeProvider) {
