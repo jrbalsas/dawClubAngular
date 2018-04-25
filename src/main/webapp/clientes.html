@@ -79,7 +79,7 @@
                         </div>
                         <div class="form-group">
 
-                            <label>DNI: <input name="Dni" data-ng-model="$ctrl.cliente.dni" ng-pattern='/^\d{7,8}(-?[a-z])?$/i'  class="form-control"/></label>
+                            <label>DNI: <input name="Dni" data-ng-model="$ctrl.cliente.dni" ng-pattern='/^\d{7,8}(-?[a-z])?$/i' required class="form-control"/></label>
                             <span id="errDni" class="text-danger" ng-show='frmClientes.Dni.$dirty && !frmClientes.Dni.$valid'>
                                 El DNI no es de la forma 12345678-A
                             </span>
