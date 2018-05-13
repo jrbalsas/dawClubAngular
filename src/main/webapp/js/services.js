@@ -3,7 +3,7 @@
 /* Services */
 
 /** DAO implementation using Angular service $http */
-class ClientesDAOREST {
+class ClientesDAO$http {
     constructor($http) {
         this.$http = $http;
 
@@ -61,18 +61,14 @@ class ClientesDAOList {
     //Simulate an async operation which returns data with some delay
     //i.e $http()
     asyncOp(data) {
-        let deferred = this.$q.defer();  //Create promise
-        //create promise success method as in $http
-//            deferred.promise.success= function (usrCallBack) {
-//                deferred.promise.then(function(data){
-//                    usrCallBack(data);
-//                },
-//                null);
-//            };
-        this.$timeout(function () {
-            deferred.resolve(data);
-        }, 100);
-        return deferred.promise;
+        //Angular $q its similar to ES6 Promise object, but it helps to 
+        //sync view when model-view is updated after async operation completes
+        let promise=this.$q((resolve,reject) => {
+            this.$timeout(function () {
+                resolve(data);
+            }, 100);            
+        });
+        return promise;
     }
     //public methods
     buscaTodos() {
@@ -86,12 +82,10 @@ class ClientesDAOList {
                 if (c.id === id) {
                     angular.copy(c, cliente);
                     return true;
-                }
-                ;
+                };
                 return false;
             });
-        }
-        ;
+        };
         return this.asyncOp(cliente);
     }
     borra(id) {
@@ -104,8 +98,7 @@ class ClientesDAOList {
                 }
                 return false;
             });
-        }
-        ;
+        };
         return this.asyncOp({});
     }
     guarda(cliente) {
@@ -115,8 +108,7 @@ class ClientesDAOList {
                 if (c.id === cliente.id) {
                     angular.copy(cliente, c);
                     return true;
-                }
-                ;
+                };
                 return false;
             });
         }
@@ -130,9 +122,8 @@ class ClientesDAOList {
     }
 } //ClientesDAOList
 
-
 /* Register DAOs as Angular services */
 angular.module('clientesApp.services', [])
         .value('version', '0.1')
         .service('ClientesDAOList', ['$q', '$timeout', ClientesDAOList])
-        .service('ClientesDAOREST', ['$http', ClientesDAOREST]);
+        .service('ClientesDAO$http', ['$http', ClientesDAO$http]);

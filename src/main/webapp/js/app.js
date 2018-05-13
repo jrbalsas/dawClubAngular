@@ -7,7 +7,7 @@ angular.module('clientesApp', [
   'clientesApp.components',
   'clientesApp.controllers'
 ]).
-config(['$routeProvider', function($routeProvider) {
+config(['$routeProvider', $routeProvider => {
   $routeProvider
     .when('/lista', {templateUrl: 'partials/clientes/lista.html', controller: 'ClientesRouteCtrl', controllerAs: '$ctrl' })
     .when('/visualiza/:idCliente', {templateUrl: 'partials/clientes/visualiza.html', controller: 'ClientesRouteCtrl', controllerAs: '$ctrl'})

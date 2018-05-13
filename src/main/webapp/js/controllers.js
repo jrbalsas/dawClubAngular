@@ -154,8 +154,8 @@ class ClientesRouteCtrl {
 
 } //ClientesRouteCtrl
 
-/** Angular module for controllers */
-angular.module('clientesApp.controllers', [])
-        .controller('ClientesCtrl', ['ClientesDAOREST', ClientesCtrl])
-        .controller('ClientesRouteCtrl', ['$routeParams', '$location', 'ClientesDAOREST', ClientesRouteCtrl]);
+/** Angular module for controllers, depends on service's module */
+angular.module('clientesApp.controllers', ['clientesApp.services'])
+        .controller('ClientesCtrl', ['ClientesDAO$http', ClientesCtrl])
+        .controller('ClientesRouteCtrl', ['$routeParams', '$location', 'ClientesDAO$http', ClientesRouteCtrl]);
 
