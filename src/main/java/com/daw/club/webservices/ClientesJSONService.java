@@ -2,6 +2,7 @@ package com.daw.club.webservices;
 
 import com.daw.club.model.Cliente;
 import com.daw.club.model.dao.ClienteDAO;
+import com.daw.club.model.dao.qualifiers.DAOJdbc;
 import com.daw.club.model.dao.qualifiers.DAOList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import javax.ws.rs.core.Response;
  * @author jrbalsas
  */
 @Path("clientes")
-@Produces(MediaType.APPLICATION_JSON+";charset=utf-8")
+@Produces(MediaType.APPLICATION_JSON)
 
 @RequestScoped 
 public class ClientesJSONService {
@@ -37,7 +38,8 @@ public class ClientesJSONService {
     @Context
     private UriInfo context;
 
-    @Inject     @DAOList
+    @Inject @DAOList
+    //@Inject @DAOJdbc
     ClienteDAO clienteDAO;
 
     public ClientesJSONService() {
