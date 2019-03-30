@@ -7,20 +7,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
 
         <!-- Optional theme -->
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-theme.min.css" >
 
         <!-- Bootstrap dependencies-->
         <script defer src="//code.jquery.com/jquery-3.3.1.min.js" ></script>
-        <script defer src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>        
+        <script defer src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>        
 
         <link rel="stylesheet"  href="css/app.css"/>
 
         <!-- Angular Dependencies -->
-        <script defer src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-        <script defer src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+        <script defer src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>
+        <script defer src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-route.js"></script>
 
         <!-- App modules -->
         <script defer src="js/app.js"></script>
@@ -35,13 +35,12 @@
                 Club de Tenis
             </h1>
         </header>
-        <main class="row">
+        <main class="row" ng-view>
             <!-- Partials location -->
-            <div ng-view></div>
         </main>
-        <footer class="panel panel-default well">
-            <div class="panel-body">
-                <p>Made with <span style="color:red">❤</span> in DAW </p>
+        <footer class="card text-right well bg-light">
+            <div class="card-body">
+                <p class="card-text">Made with <span class="text-danger">❤</span> in DAW </p>
             </div>
         </footer>
 
