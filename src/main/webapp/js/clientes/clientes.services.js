@@ -1,9 +1,10 @@
-'use strict';
-
-/* Services */
+/* Angular Service samples: DAO implementations */
 
 /** DAO implementation using Angular service $http */
-class ClientesDAO$http {
+export class ClientesDAO$http {
+    
+    //static $inject=['$http'];   //Angular dependencies
+    
     constructor($http) {
         this.$http = $http;
 
@@ -30,13 +31,16 @@ class ClientesDAO$http {
         return this.$http.post(this.srvUrl, cliente).then(response => response.data);
     }
 
-} //ClienteDAORest
+} //ClienteDAO$http
+ClientesDAO$http.$inject=['$http'];   //Angular dependencies
 
 /**DAO over simple array for testing purposes
  Returns promises to attach user callbacks
  Used for compatibility with DAO remote implementation methods*/
 
-class ClientesDAOList {
+export class ClientesDAOList {
+
+    //static $inject = ['$q', '$timeout'];
 
     constructor($q, $timeout) {
         this.$q=$q;
@@ -79,7 +83,9 @@ class ClientesDAOList {
         if (id > 0) {
             //Look for cliente
             this.clientes.some(function (c, key) {
-                if (c.id === id) {
+
+                if (c.id == id) {
+
                     angular.copy(c, cliente);
                     return true;
                 };
@@ -92,7 +98,7 @@ class ClientesDAOList {
         if (id > 0) {
             //Borrar cliente
             this.clientes.some(function (c, key, clientes) {
-                if (c.id === id) {
+                if (c.id == id) {
                     clientes.splice(key, 1);
                     return true;
                 }
@@ -105,7 +111,7 @@ class ClientesDAOList {
         if (cliente.id > 0) {
             //Modify cliente data
             this.clientes.some(function (c, key) {
-                if (c.id === cliente.id) {
+                if (c.id == cliente.id) {
                     angular.copy(cliente, c);
                     return true;
                 };
@@ -121,9 +127,4 @@ class ClientesDAOList {
         return this.asyncOp(cliente);
     }
 } //ClientesDAOList
-
-/* Register DAOs as Angular services */
-angular.module('clientesApp.services', [])
-        .value('version', '0.1')
-        .service('ClientesDAOList', ['$q', '$timeout', ClientesDAOList])
-        .service('ClientesDAO$http', ['$http', ClientesDAO$http]);
+ClientesDAOList.$inject = ['$q', '$timeout'];

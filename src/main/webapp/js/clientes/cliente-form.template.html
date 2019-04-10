@@ -1,0 +1,38 @@
+<div class="row">
+<nav class="col-md-2">
+    <h2>Opciones</h2>
+    <ul class="nav nav-pills flex-column">
+        <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" ng-href="#!/clientes" id="btEdita" >Volver</a></li>
+        <li class="nav-item"><a class="nav-link" ng-href="#!/clientes/{{$ctrl.cliente.id}}" id="btVisualiza" >Visualiza</a></li>
+    </ul>
+</nav>
+<section class="col-md-10">
+    <h2 ng-if="$ctrl.cliente.id>0">Edición de cliente </h2>
+    <h2 ng-if="!$ctrl.cliente.id>0">Alta de cliente </h2>
+<!-- Clientes modal EDIT form-->
+    <!-- Show server validation errors -->
+    <errores-validacion msgs="$ctrl.errMsgs"></errores-validacion>
+
+    <form novalidate  name='frmClientes' class="well">
+
+            <h3>ID: <span data-ng-bind='$ctrl.cliente.id'></span></h3>
+
+            <label>Nombre: </label><input name='nombre' data-ng-model="$ctrl.cliente.nombre" required  class="form-control"/>
+            <p id="errNombre" class="text-danger" ng-show='frmClientes.nombre.$dirty && !frmClientes.nombre.$valid'>
+                El nombre es obligatorio
+            </p>
+
+            <label>DNI: </label><input name="Dni" data-ng-model="$ctrl.cliente.dni" ng-pattern='/^\d{7,8}(-?[a-z])?$/i' required class="form-control"/>
+            <p id="errDni" class="text-danger" ng-show='frmClientes.Dni.$dirty && !frmClientes.Dni.$valid'>
+                El DNI no es de la forma 12345678-A
+            </p>
+
+            <label>Socio:</label> <input type="checkbox" id="ibSocio" data-ng-model="$ctrl.cliente.socio"  class="form-control"/>
+            
+            <button data-ng-click="$ctrl.guarda()" data-ng-disabled='!frmClientes.$valid' class="btn btn-primary" >Guardar</button>
+            <button data-ng-click="$ctrl.borra($ctrl.cliente.id)" data-ng-show='$ctrl.cliente.id>0' class="btn btn-danger" >Borrar</button>
+        <a ng-href="#!/clientes" class="btn btn-default"  >Cancelar</a>
+    </form>
+</section>
+</div>

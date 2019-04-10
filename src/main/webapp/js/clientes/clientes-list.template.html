@@ -1,0 +1,25 @@
+<div class="row">
+<nav class="col-md-2">
+    <h2>Opciones</h2>
+    <ul class="nav nav-pills flex-column">
+        <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#" id="btCrea" data-ng-href="#!/clientes/crea">Nuevo Cliente</a></li>
+    </ul>
+</nav>
+<section class="col-md-10">
+    <h2>Listado de cliente </h2>
+
+<table class="col table table-striped table-hover">
+    <thead>
+        <tr><th ng-click="$ctrl.orderBy('id')">ID <span ng-if="$ctrl.order=='id'">&darr;</span></th>
+            <th ng-click="$ctrl.orderBy('nombre')">Nombre<span ng-if="$ctrl.order=='nombre'">&darr;</span></th>
+            <th ng-click="$ctrl.orderBy('dni')">DNI<span ng-if="$ctrl.order=='dni'">&darr;</span></th>
+            <th ng-click="$ctrl.orderBy('socio')">Socio<span ng-if="$ctrl.order=='socio'">&darr;</span></th>
+        </tr>
+    </thead>
+    <tr class="c-pointer" data-ng-repeat="c in $ctrl.clientes | orderBy:$ctrl.order" data-ng-click='$ctrl.view(c.id)'>
+        <td ng-bind="c.id"></td><td ng-bind="c.nombre"></td><td ng-bind="c.dni"></td><td ng-bind="c.socio"></td>
+    </tr>
+</table>  
+</section>
+</div>

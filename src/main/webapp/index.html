@@ -3,12 +3,30 @@
     <head>
         <meta charset="UTF-8">
         <title>Gestión Clientes</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
+
+        <link rel="stylesheet"  href="css/app.css"/>
     </head>
-    <body  >
-        <h1>Gestión CRUD Clientes Angular</h1>
-        <ul>
-            <li><a href="clientes.html">SPA version</a></li>
-            <li><a href="clientesapp.html">SPA version with Routing/partials</a></li>
+    <body class="container">
+        <header class="jumbotron">
+            <h1>Club de Tenis</h1>
+        </header>     
+        <main class="row" >
+        <nav class="col-md-3">
+        <h2>Opciones</h2>
+        <ul class="nav nav-pills flex-column">
+            <li class="nav-item"><a class="nav-link active" href="appclientes.html" >Gestión clientes</a></li>
+            <li class="nav-item"><a class="nav-link disabled" href="#" >Gestión instalaciones</a></li>
+            <li class="nav-item"><a class="nav-link disabled" href="#" >Gestión servicios</a></li>
         </ul>
+        </nav>
+        <section class="col-md-9">
+            <p>Versión Simple Page Application (SPA) utilizando AngularJS + Módulos ES6</p>
+        </section>
+        </main>
     </body>
 </html>

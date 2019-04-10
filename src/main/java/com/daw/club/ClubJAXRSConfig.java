@@ -8,6 +8,6 @@ import javax.ws.rs.core.Application;
  * @author jrbalsas
  */
 @ApplicationPath("webservice")  //  Service URL: /webservice/*
-public class ClubRESTService extends Application {
+public class ClubJAXRSConfig extends Application {
   
 }
