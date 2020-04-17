@@ -13,6 +13,6 @@ Sample Maven Netbeans project with classic CRUD Web App using AngularJS/JAX-RS
 - JAX-RS webservice for serving JSON contents
 
 ## Usage:
- - Select Clientes DAO implementation in JAX-RS Service: ClientDAOREST or ClientesDAOList
+ - Select Clientes DAO implementation in JAX-RS Service: ClientDAOREST or ClientesDAOMap
  - Select Clientes DAO implementation in AngularJS module (clintes.module.js): ClientesDAO$http or ClientesDAOList
  - Package and deploy in a JEE8 Application Server, e.g. Payara/Glassfish

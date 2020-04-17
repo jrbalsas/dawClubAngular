@@ -2,8 +2,7 @@ package com.daw.club.webservices;
 
 import com.daw.club.model.Cliente;
 import com.daw.club.model.dao.ClienteDAO;
-import com.daw.club.model.dao.qualifiers.DAOJdbc;
-import com.daw.club.model.dao.qualifiers.DAOList;
+import com.daw.club.model.dao.qualifiers.DAOMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,16 +32,15 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 
 @RequestScoped 
-public class ClientesJSONService {
+public class ClientesRESTService {
 
     @Context
     private UriInfo context;
 
-    @Inject @DAOList
-    //@Inject @DAOJdbc
+    @Inject     @DAOMap
     ClienteDAO clienteDAO;
 
-    public ClientesJSONService() {
+    public ClientesRESTService() {
     }
 
     @GET

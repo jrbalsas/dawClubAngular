@@ -1,12 +1,14 @@
 package com.daw.club;
 
+
+
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
 
 /** Allows access from specified origins
- *
+ * @note It is only required if JS client is in a different origin
  * @author jrbalsas
  */
 @Provider
