@@ -9,7 +9,7 @@ export const clubFooterComponent = {
             <div class="card-body">                
                 <p class="card-text" > 
                     <span ng-if="!$ctrl.text">
-                        Made with <span class="text-danger">❤</span> in DAW
+                        Made with <span class="text-danger">&#9829;</span> in DAW
                     </span>
                     {{$ctrl.text}}
                 </p>

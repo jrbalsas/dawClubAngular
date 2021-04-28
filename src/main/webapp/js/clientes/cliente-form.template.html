@@ -27,9 +27,10 @@
             <p id="errDni" class="text-danger" ng-show='frmClientes.Dni.$dirty && !frmClientes.Dni.$valid'>
                 El DNI no es de la forma 12345678-A
             </p>
-
-            <label>Socio:</label> <input type="checkbox" id="ibSocio" data-ng-model="$ctrl.cliente.socio"  class="form-control"/>
-            
+            <div class="form-group form-check mt-2" >
+            <input type="checkbox" id="ibSocio" data-ng-model="$ctrl.cliente.socio"  class="form-check-input"/>
+            <label class="form-check-label">Socio:</label> 
+            </div>
             <button data-ng-click="$ctrl.guarda()" data-ng-disabled='!frmClientes.$valid' class="btn btn-primary" >Guardar</button>
             <button data-ng-click="$ctrl.borra($ctrl.cliente.id)" data-ng-show='$ctrl.cliente.id>0' class="btn btn-danger" >Borrar</button>
         <a ng-href="#!/clientes" class="btn btn-default"  >Cancelar</a>
