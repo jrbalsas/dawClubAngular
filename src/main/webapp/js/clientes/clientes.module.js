@@ -13,11 +13,13 @@ export const ClientesModule = angular
     .component('clienteForm', clienteFormComponent)
     .component('clienteDetalle', clienteDetalleComponent)
     .component('clientesList', clientesListComponent)
+    //REST webservice URL (used in ClientesDAO$http)
+    .value('webServiceUrl','webservice/clientes') 
 // Select DAO implementation
     .service('clientesDAO',ClientesDAO$http)    
 //    .service('clientesDAO',ClientesDAOList)    
 // Route definitions
-    .config(['$routeProvider', $routeProvider =>  {
+    .config( $routeProvider =>  {
       $routeProvider
           .when('/clientes', {template: '<clientes-list clientes="$resolve.clientes"/>', 
                   resolve: {
@@ -40,6 +42,6 @@ export const ClientesModule = angular
                   }
            })
           .otherwise({redirectTo: '/clientes'});
-    }])  
+    })  
     .name;
     

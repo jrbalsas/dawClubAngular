@@ -5,10 +5,10 @@ export class ClientesDAO$http {
     
     //static $inject=['$http'];   //Angular dependencies
     
-    constructor($http) {
+    constructor($http, webServiceUrl) {
         this.$http = $http;
 
-        this.srvUrl = "webservice/clientes";
+        this.srvUrl = webServiceUrl;
     }
     buscaTodos() {
         return this.$http.get(this.srvUrl).then(response => response.data);
@@ -32,7 +32,7 @@ export class ClientesDAO$http {
     }
 
 } //ClienteDAO$http
-ClientesDAO$http.$inject=['$http'];   //Angular dependencies
+ClientesDAO$http.$inject=['$http','webServiceUrl'];   //Angular dependencies
 
 /**DAO over simple array for testing purposes
  Returns promises to attach user callbacks
